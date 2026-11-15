@@ -29,8 +29,7 @@ button, input { font-family: inherit; font-size: 1em; }
 .tab.on { color: #f2b134; border-bottom-color: #f2b134; font-weight: 600; }
 
 #main { padding-top: 106px; padding-bottom: 24px; }
-.item { display: block; width: 100%; padding: 0 0 14px 0; text-align: left; background: none; border: 0;
-  color: inherit; cursor: pointer; }
+.item { display: block; width: 100%; padding: 0 0 14px 0; text-align: left; color: inherit; cursor: pointer; }
 .thumb { position: relative; width: 100%; padding-top: 56.25%; background: #1c222b; overflow: hidden; }
 .thumb img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: block; }
 .dur { position: absolute; right: 6px; bottom: 6px; padding: 1px 5px; background: rgba(0,0,0,.82);
@@ -38,6 +37,8 @@ button, input { font-family: inherit; font-size: 1em; }
 .meta { padding: 8px 12px 0 12px; }
 .ttl { font-size: 15px; line-height: 20px; max-height: 40px; overflow: hidden; font-weight: 600; }
 .sub { margin-top: 3px; font-size: 12.5px; color: #8e9aab; }
+.chan { display: inline-block; padding: 3px 0; color: #b4c0d0; text-decoration: underline;
+  text-decoration-color: #4a5566; cursor: pointer; }
 
 .msg { margin: 24px 16px; padding: 14px; background: #1c222b; border-left: 3px solid #f2b134;
   line-height: 1.45; }
@@ -46,21 +47,73 @@ button, input { font-family: inherit; font-size: 1em; }
   background: transparent; color: #e8edf2; border-radius: 4px; }
 .spin { text-align: center; color: #8e9aab; padding: 24px; }
 
+/* ----- canal ----- */
+#chan { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 15;
+  background: #12161c; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: 24px; }
+#cbar { height: 44px; display: -ms-flexbox; display: flex; -ms-flex-align: center; align-items: center;
+  border-bottom: 1px solid #2a323d; margin-bottom: 12px; }
+#cback { height: 44px; padding: 0 16px; border: 0; background: none; color: #f2b134; font-weight: 600; }
+#chead { display: -ms-flexbox; display: flex; -ms-flex-align: center; align-items: center;
+  padding: 4px 12px 16px 12px; }
+#chead img { width: 64px; height: 64px; border-radius: 50%; background: #1c222b; margin-right: 14px; }
+#chead .cn { font-size: 19px; font-weight: 600; line-height: 24px; }
+#chead .cs { margin-top: 2px; font-size: 12.5px; color: #8e9aab; }
+
+/* ----- reproductor ----- */
 #player { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 20;
   background: #12161c; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 #pbar { height: 44px; display: -ms-flexbox; display: flex; -ms-flex-align: center; align-items: center; }
 #back { height: 44px; padding: 0 16px; border: 0; background: none; color: #f2b134; font-weight: 600; }
+
+#vwrap { background: #000; }
 #frame { position: relative; width: 100%; padding-top: 56.25%; background: #000; }
 #frame iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+#ctl { background: #12161c; padding: 4px 8px 8px 8px; }
+#seekrow { display: -ms-flexbox; display: flex; -ms-flex-align: center; align-items: center; height: 36px; }
+#seekrow span { width: 46px; font-size: 12px; color: #8e9aab; text-align: center; }
+#seek { -ms-flex: 1; flex: 1; min-width: 0; height: 32px; margin: 0; padding: 0; background: transparent; }
+#seek::-ms-track { height: 4px; background: transparent; border-color: transparent; color: transparent; }
+#seek::-ms-fill-lower { background: #f2b134; }
+#seek::-ms-fill-upper { background: #3a4452; }
+#seek::-ms-thumb { width: 20px; height: 20px; border: 0; border-radius: 50%; background: #f2b134; }
+#seek::-ms-tooltip { display: none; }
+#btnrow { display: -ms-flexbox; display: flex; }
+.cb { -ms-flex: 1; flex: 1; height: 40px; margin: 0 3px; border: 1px solid #3a4452; background: #1c222b;
+  color: #e8edf2; border-radius: 4px; padding: 0; font-weight: 600; }
+.cb.wide { -ms-flex: 1.6; flex: 1.6; background: #f2b134; color: #12161c; border-color: #f2b134; }
+.cb svg { width: 20px; height: 20px; vertical-align: middle; }
+#vwrap.fs { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 40;
+  display: -ms-flexbox; display: flex; -ms-flex-direction: column; flex-direction: column; }
+#vwrap.fs #frame { -ms-flex: 1; flex: 1; padding-top: 0; min-height: 0; }
+#vwrap.fs #ctl { padding: 2px 8px 4px 8px; }
+#vwrap.fs #seekrow { height: 30px; }
+#vwrap.fs .cb { height: 34px; }
+
 #pinfo { padding: 12px; }
 #ptitle { font-size: 17px; font-weight: 600; line-height: 22px; }
-#pchan { margin-top: 6px; color: #f2b134; }
+#pchan { margin-top: 4px; color: #f2b134; font-weight: 600; text-decoration: none; }
 #pstats { margin-top: 2px; font-size: 12.5px; color: #8e9aab; }
+#ptabs { display: -ms-flexbox; display: flex; margin-top: 12px; border-bottom: 1px solid #2a323d; }
 #pdesc { margin-top: 14px; white-space: pre-wrap; word-wrap: break-word; line-height: 1.45;
   color: #c4ccd6; font-size: 14px; }
+#pcomm { display: none; margin-top: 10px; }
 #pfall { display: inline-block; margin-top: 12px; color: #8e9aab; font-size: 13px; }
 
-#cfg { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 30;
+#cmord { display: -ms-flexbox; display: flex; margin-bottom: 6px; }
+.ord { height: 32px; padding: 0 14px; margin-right: 8px; border: 1px solid #3a4452; background: transparent;
+  color: #8e9aab; border-radius: 16px; font-size: 13px; }
+.ord.on { color: #12161c; background: #f2b134; border-color: #f2b134; font-weight: 600; }
+.cm { padding: 10px 0; border-bottom: 1px solid #222a35; }
+.cm.rp { margin-left: 18px; border-bottom: 0; padding: 8px 0 2px 0; }
+.ca { font-size: 13px; font-weight: 600; color: #b4c0d0; }
+.ca .cd { font-weight: 400; color: #6f7c8e; margin-left: 6px; font-size: 12px; }
+.ct { margin-top: 3px; white-space: pre-wrap; word-wrap: break-word; line-height: 1.4; font-size: 14px;
+  color: #d4dbe4; }
+.cl { margin-top: 4px; font-size: 12px; color: #8e9aab; }
+.rbtn { margin-left: 10px; padding: 4px 0; border: 0; background: none; color: #f2b134; font-size: 12px;
+  font-weight: 600; }
+
+#cfg { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 50;
   background: #12161c; overflow-y: auto; padding: 16px; }
 #cfg h2 { margin: 8px 0 12px 0; font-size: 20px; }
 #cfg label { display: block; margin: 14px 0 4px 0; color: #8e9aab; font-size: 13px; }
@@ -88,24 +141,61 @@ button, input { font-family: inherit; font-size: 1em; }
 
 <div id="main"><div id="list"></div></div>
 
+<div id="chan">
+  <div id="cbar"><button id="cback" type="button">&#8592; Volver</button></div>
+  <div id="chead"></div>
+  <div id="clist"></div>
+</div>
+
 <div id="player">
   <div id="pbar"><button id="back" type="button">&#8592; Volver</button></div>
-  <div id="frame"></div>
+  <div id="vwrap">
+    <div id="frame"></div>
+    <div id="ctl">
+      <div id="seekrow">
+        <span id="tcur">0:00</span>
+        <input type="range" id="seek" min="0" max="100" step="1" value="0">
+        <span id="tdur">0:00</span>
+      </div>
+      <div id="btnrow">
+        <button class="cb" type="button" data-seek="-30">&minus;30</button>
+        <button class="cb" type="button" data-seek="-10">&minus;10</button>
+        <button class="cb wide" type="button" id="pp">Pausa</button>
+        <button class="cb" type="button" data-seek="10">+10</button>
+        <button class="cb" type="button" data-seek="30">+30</button>
+        <button class="cb" type="button" id="fsbtn" title="Pantalla completa">
+          <svg viewBox="0 0 20 20" fill="none" stroke="#e8edf2" stroke-width="2">
+            <path d="M3 8V3h5M12 3h5v5M17 12v5h-5M8 17H3v-5"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
   <div id="pinfo">
     <div id="ptitle"></div>
     <div id="pchan"></div>
     <div id="pstats"></div>
+    <div id="ptabs">
+      <button class="tab on" id="ptab-desc" type="button">Descripci&oacute;n</button>
+      <button class="tab" id="ptab-comm" type="button">Comentarios</button>
+    </div>
     <div id="pdesc"></div>
+    <div id="pcomm">
+      <div id="cmord">
+        <button class="ord on" type="button" data-order="relevance">Populares</button>
+        <button class="ord" type="button" data-order="time">Recientes</button>
+      </div>
+      <div id="cmlist"></div>
+    </div>
     <a id="pfall" target="_blank" rel="noopener">Abrir en YouTube</a>
   </div>
 </div>
 
 <div id="cfg">
   <h2>Ajustes</h2>
-  <p>Pegá tu clave de la API de datos de YouTube v3. Se guarda solo en este teléfono.</p>
+  <p>Peg&aacute; tu clave de la API de datos de YouTube v3. Se guarda solo en este tel&eacute;fono.</p>
   <label for="key">Clave de API</label>
   <input id="key" type="text" autocomplete="off" autocapitalize="off" spellcheck="false">
-  <label for="reg">Región de tendencias (código de 2 letras)</label>
+  <label for="reg">Regi&oacute;n de tendencias (c&oacute;digo de 2 letras)</label>
   <input id="reg" type="text" maxlength="2" autocapitalize="characters" autocomplete="off">
   <button class="btn" id="save" type="button">Guardar</button>
   <button class="btn alt" id="close" type="button">Cerrar</button>
@@ -123,6 +213,10 @@ button, input { font-family: inherit; font-size: 1em; }
   function $(id) { return document.getElementById(id); }
 
   var state = { mode: "trend", query: "", token: "", loading: false, gen: 0 };
+  var cs = { id: "", uploads: "", token: "", loading: false, gen: 0 };
+  var cm = { id: "", loaded: false, token: "", order: "relevance", loading: false, gen: 0 };
+  var P = { heard: false, cur: 0, dur: 0, st: 1, lastUser: 0, timer: null, tries: 0 };
+  var currentId = "";
 
   function getKey() { return store.get("yt_key") || ""; }
   function getRegion() { return (store.get("yt_region") || "AR").toUpperCase(); }
@@ -138,12 +232,17 @@ button, input { font-family: inherit; font-size: 1em; }
     t.innerHTML = s || "";
     return t.value;
   }
+  function p2(n) { return n < 10 ? "0" + n : "" + n; }
   function fmtDur(iso) {
     var m = /^P(?:(\d+)D)?T?(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/.exec(iso || "");
     if (!m) { return ""; }
     var h = (+m[1] || 0) * 24 + (+m[2] || 0), mi = +m[3] || 0, s = +m[4] || 0;
-    function p(n) { return n < 10 ? "0" + n : "" + n; }
-    return h ? h + ":" + p(mi) + ":" + p(s) : mi + ":" + p(s);
+    return h ? h + ":" + p2(mi) + ":" + p2(s) : mi + ":" + p2(s);
+  }
+  function fmtClock(sec) {
+    sec = Math.max(0, Math.floor(sec || 0));
+    var h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60), s = sec % 60;
+    return h ? h + ":" + p2(m) + ":" + p2(s) : m + ":" + p2(s);
   }
   function fmtNum(n) {
     n = +n;
@@ -186,21 +285,24 @@ button, input { font-family: inherit; font-size: 1em; }
         if (x.status >= 200 && x.status < 300 && data) { resolve(data); return; }
         var reason = data && data.error && data.error.errors && data.error.errors[0] &&
                      data.error.errors[0].reason;
-        var err = new Error(
-          reason === "quotaExceeded" ? "Se agotó la cuota diaria de la API. Probá mañana." :
-          reason === "keyInvalid" || reason === "badRequest" && /key/i.test(x.responseText)
-            ? "La clave de API no es válida. Revisala en Ajustes." :
-          reason === "accessNotConfigured" || reason === "forbidden"
-            ? "La API de datos de YouTube v3 no está activada para esta clave." :
-          x.status === 0 ? "Sin conexión con YouTube. Revisá tu internet." :
-          "Error " + x.status + (reason ? " (" + reason + ")" : ""));
-        reject(err);
+        var msg;
+        if (reason === "quotaExceeded") { msg = "Se agotó la cuota diaria de la API. Probá mañana."; }
+        else if (reason === "commentsDisabled") { msg = "Los comentarios están desactivados en este video."; }
+        else if (reason === "keyInvalid" || (reason === "badRequest" && /key/i.test(x.responseText))) {
+          msg = "La clave de API no es válida. Revisala en Ajustes.";
+        }
+        else if (reason === "accessNotConfigured" || reason === "forbidden") {
+          msg = "La API de datos de YouTube v3 no está activada para esta clave.";
+        }
+        else if (x.status === 0) { msg = "Sin conexión con YouTube. Revisá tu internet."; }
+        else { msg = "Error " + x.status + (reason ? " (" + reason + ")" : ""); }
+        reject(new Error(msg));
       };
       x.send();
     });
   }
 
-  /* ---------- listado ---------- */
+  /* ---------- listados (inicio, búsqueda, canal) ---------- */
   function showMsg(html, isErr) {
     $("list").innerHTML = '<div class="msg' + (isErr ? " err" : "") + '">' + html + "</div>";
   }
@@ -209,37 +311,39 @@ button, input { font-family: inherit; font-size: 1em; }
     $("tab-trend").className = "tab" + (mode === "trend" ? " on" : "");
     $("tab-search").className = "tab" + (mode === "search" ? " on" : "");
   }
-  function removeMoreBtn() {
-    var m = $("morebtn");
+  function removeEl(id) {
+    var m = $(id);
     if (m && m.parentNode) { m.parentNode.removeChild(m); }
-    var s = $("spin");
-    if (s && s.parentNode) { s.parentNode.removeChild(s); }
   }
 
   function itemHtml(v) {
-    return '<button class="item" type="button" data-id="' + esc(v.id) + '">' +
+    return '<div class="item" data-id="' + esc(v.id) + '">' +
       '<div class="thumb"><img src="' + esc(v.thumb) + '" alt="">' +
       (v.dur ? '<span class="dur">' + esc(v.dur) + "</span>" : "") + "</div>" +
       '<div class="meta"><div class="ttl">' + esc(v.title) + "</div>" +
-      '<div class="sub">' + esc(v.channel) +
+      '<div class="sub"><span class="chan"' + (v.ch ? ' data-ch="' + esc(v.ch) + '"' : "") + ">" +
+      esc(v.channel) + "</span>" +
       (v.views ? " &bull; " + esc(v.views) + " vistas" : "") +
-      (v.ago ? " &bull; " + esc(v.ago) : "") + "</div></div></button>";
+      (v.ago ? " &bull; " + esc(v.ago) : "") + "</div></div></div>";
   }
 
   function thumbOf(sn) {
     var t = sn.thumbnails || {};
     return (t.medium || t.high || t.default || {}).url || "";
   }
-
-  // Dado un arreglo de ids, trae duración y vistas y devuelve un mapa
+  // Convierte un item del endpoint "videos" (snippet+contentDetails+statistics)
+  function vidFromVideo(i) {
+    return { id: i.id, title: decode(i.snippet.title), channel: i.snippet.channelTitle,
+             ch: i.snippet.channelId, thumb: thumbOf(i.snippet),
+             dur: fmtDur(i.contentDetails && i.contentDetails.duration),
+             views: fmtNum(i.statistics && i.statistics.viewCount), ago: fmtAgo(i.snippet.publishedAt) };
+  }
   function details(ids) {
     if (!ids.length) { return Promise.resolve({}); }
     return call("videos", { part: "contentDetails,statistics", id: ids.join(",") })
       .then(function (d) {
         var map = {};
-        for (var i = 0; i < d.items.length; i++) {
-          map[d.items[i].id] = d.items[i];
-        }
+        for (var i = 0; i < d.items.length; i++) { map[d.items[i].id] = d.items[i]; }
         return map;
       })
       .catch(function () { return {}; });
@@ -255,8 +359,7 @@ button, input { font-family: inherit; font-size: 1em; }
       $("list").innerHTML = '<div class="spin">Cargando&hellip;</div>';
       window.scrollTo(0, 0);
     } else {
-      var mb = $("morebtn");
-      if (mb) { mb.parentNode.removeChild(mb); }
+      removeEl("morebtn");
       $("list").insertAdjacentHTML("beforeend", '<div class="spin" id="spin">Cargando&hellip;</div>');
     }
 
@@ -266,11 +369,7 @@ button, input { font-family: inherit; font-size: 1em; }
         part: "snippet,contentDetails,statistics", chart: "mostPopular",
         regionCode: getRegion(), maxResults: 20, pageToken: state.token
       }).then(function (d) {
-        return { token: d.nextPageToken || "", vids: d.items.map(function (i) {
-          return { id: i.id, title: decode(i.snippet.title), channel: i.snippet.channelTitle,
-                   thumb: thumbOf(i.snippet), dur: fmtDur(i.contentDetails.duration),
-                   views: fmtNum(i.statistics.viewCount), ago: fmtAgo(i.snippet.publishedAt) };
-        }) };
+        return { token: d.nextPageToken || "", vids: d.items.map(vidFromVideo) };
       });
     } else {
       req = call("search", {
@@ -282,7 +381,8 @@ button, input { font-family: inherit; font-size: 1em; }
           return { token: d.nextPageToken || "", vids: d.items.map(function (i) {
             var x = map[i.id.videoId];
             return { id: i.id.videoId, title: decode(i.snippet.title), channel: i.snippet.channelTitle,
-                     thumb: thumbOf(i.snippet), dur: x ? fmtDur(x.contentDetails.duration) : "",
+                     ch: i.snippet.channelId, thumb: thumbOf(i.snippet),
+                     dur: x ? fmtDur(x.contentDetails.duration) : "",
                      views: x ? fmtNum(x.statistics.viewCount) : "", ago: fmtAgo(i.snippet.publishedAt) };
           }) };
         });
@@ -292,7 +392,7 @@ button, input { font-family: inherit; font-size: 1em; }
     req.then(function (r) {
       if (gen !== state.gen) { return; }
       state.loading = false;
-      removeMoreBtn();
+      removeEl("morebtn"); removeEl("spin");
       if (reset) { $("list").innerHTML = ""; }
       if (!r.vids.length && reset) { showMsg("No se encontraron videos."); return; }
       var h = "";
@@ -306,55 +406,360 @@ button, input { font-family: inherit; font-size: 1em; }
     }).catch(function (e) {
       if (gen !== state.gen) { return; }
       state.loading = false;
-      removeMoreBtn();
+      removeEl("morebtn"); removeEl("spin");
       if (reset) { showMsg(esc(e.message), true); }
-      else {
-        $("list").insertAdjacentHTML("beforeend",
-          '<div class="msg err">' + esc(e.message) + "</div>");
-      }
+      else { $("list").insertAdjacentHTML("beforeend", '<div class="msg err">' + esc(e.message) + "</div>"); }
     });
   }
 
-  /* ---------- reproductor ---------- */
-  var currentId = "";
+  /* ---------- canal ---------- */
+  function syncOverflow() {
+    var open = $("player").style.display === "block" || $("chan").style.display === "block";
+    document.body.style.overflow = open ? "hidden" : "";
+  }
+
+  function openChannel(id) {
+    if (cs.id === id) { $("chan").style.display = "block"; syncOverflow(); return; }
+    cs.id = id; cs.uploads = ""; cs.token = ""; cs.loading = false;
+    var gen = ++cs.gen;
+    $("chan").style.display = "block";
+    $("chan").scrollTop = 0;
+    $("chead").innerHTML = "";
+    $("clist").innerHTML = '<div class="spin">Cargando&hellip;</div>';
+    syncOverflow();
+    call("channels", { part: "snippet,statistics,contentDetails", id: id }).then(function (d) {
+      if (gen !== cs.gen) { return; }
+      if (!d.items || !d.items.length) { $("clist").innerHTML = '<div class="msg err">No se encontró el canal.</div>'; return; }
+      var c = d.items[0], st = c.statistics || {};
+      var subs = st.hiddenSubscriberCount ? "Suscriptores ocultos" :
+                 (st.subscriberCount ? fmtNum(st.subscriberCount) + " suscriptores" : "");
+      var vc = st.videoCount ? fmtNum(st.videoCount) + " videos" : "";
+      var th = c.snippet.thumbnails || {};
+      var av = (th.default || th.medium || {}).url || "";
+      $("chead").innerHTML = (av ? '<img src="' + esc(av) + '" alt="">' : "") +
+        '<div><div class="cn">' + esc(decode(c.snippet.title)) + '</div><div class="cs">' +
+        esc(subs + (subs && vc ? " \u2022 " : "") + vc) + "</div></div>";
+      cs.uploads = c.contentDetails && c.contentDetails.relatedPlaylists &&
+                   c.contentDetails.relatedPlaylists.uploads;
+      if (!cs.uploads) { $("clist").innerHTML = '<div class="msg">Este canal no tiene videos.</div>'; return; }
+      loadChan(true);
+    }).catch(function (e) {
+      if (gen !== cs.gen) { return; }
+      $("clist").innerHTML = '<div class="msg err">' + esc(e.message) + "</div>";
+    });
+  }
+  function closeChannel() {
+    cs.id = ""; cs.gen++;
+    $("chan").style.display = "none";
+    syncOverflow();
+  }
+
+  function loadChan(reset) {
+    if (cs.loading || !cs.uploads) { return; }
+    cs.loading = true;
+    var gen = cs.gen;
+    if (reset) { cs.token = ""; $("clist").innerHTML = '<div class="spin">Cargando&hellip;</div>'; }
+    else {
+      removeEl("cmorebtn");
+      $("clist").insertAdjacentHTML("beforeend", '<div class="spin" id="cspin">Cargando&hellip;</div>');
+    }
+    call("playlistItems", { part: "contentDetails", playlistId: cs.uploads, maxResults: 20,
+                            pageToken: cs.token }).then(function (d) {
+      var ids = [];
+      for (var i = 0; i < d.items.length; i++) {
+        if (d.items[i].contentDetails && d.items[i].contentDetails.videoId) {
+          ids.push(d.items[i].contentDetails.videoId);
+        }
+      }
+      var next = d.nextPageToken || "";
+      if (!ids.length) { return { token: next, vids: [] }; }
+      return call("videos", { part: "snippet,contentDetails,statistics", id: ids.join(",") })
+        .then(function (v) {
+          var map = {}, out = [];
+          for (var j = 0; j < v.items.length; j++) { map[v.items[j].id] = v.items[j]; }
+          for (var k = 0; k < ids.length; k++) { if (map[ids[k]]) { out.push(vidFromVideo(map[ids[k]])); } }
+          return { token: next, vids: out };
+        });
+    }).then(function (r) {
+      if (gen !== cs.gen) { return; }
+      cs.loading = false;
+      removeEl("cmorebtn"); removeEl("cspin");
+      if (reset) { $("clist").innerHTML = ""; }
+      if (!r.vids.length && reset) { $("clist").innerHTML = '<div class="msg">Este canal no tiene videos.</div>'; return; }
+      var h = "";
+      for (var i = 0; i < r.vids.length; i++) { h += itemHtml(r.vids[i]); }
+      $("clist").insertAdjacentHTML("beforeend", h);
+      cs.token = r.token;
+      if (r.token) {
+        $("clist").insertAdjacentHTML("beforeend",
+          '<button class="more" id="cmorebtn" type="button">Más videos</button>');
+      }
+    }).catch(function (e) {
+      if (gen !== cs.gen) { return; }
+      cs.loading = false;
+      removeEl("cmorebtn"); removeEl("cspin");
+      $("clist").insertAdjacentHTML("beforeend", '<div class="msg err">' + esc(e.message) + "</div>");
+    });
+  }
+
+  /* ---------- reproductor: control por postMessage ---------- */
+  function getIframe() { return $("frame").getElementsByTagName("iframe")[0] || null; }
+  function post(obj) {
+    var f = getIframe();
+    if (!f || !f.contentWindow) { return; }
+    try { f.contentWindow.postMessage(JSON.stringify(obj), "*"); } catch (e) {}
+  }
+  function cmd(func, args) { post({ event: "command", func: func, args: args || [] }); }
+
+  function stopListening() { if (P.timer) { clearInterval(P.timer); P.timer = null; } }
+  function startListening() {
+    stopListening();
+    P.tries = 0;
+    P.timer = setInterval(function () {
+      if (P.heard || P.tries++ > 30) { stopListening(); return; }
+      post({ event: "listening", id: 1, channel: "widget" });
+    }, 400);
+  }
+
+  function refreshCtl() {
+    $("tcur").textContent = fmtClock(P.cur);
+    $("tdur").textContent = fmtClock(P.dur);
+    var sk = $("seek");
+    if (P.dur > 0) { sk.max = Math.floor(P.dur); }
+    if (Date.now() - P.lastUser > 1500) { sk.value = Math.floor(P.cur); }
+    $("pp").textContent = P.st === 1 ? "Pausa" : "Play";
+  }
+  function seekTo(t) {
+    if (P.dur > 0) { t = Math.min(t, P.dur - 1); }
+    t = Math.max(0, t);
+    P.cur = t;
+    P.lastUser = Date.now();
+    cmd("seekTo", [t, true]);
+    $("seek").value = Math.floor(t);
+    $("tcur").textContent = fmtClock(t);
+  }
+  function seekBy(delta) { seekTo(P.cur + delta); }
+
+  window.addEventListener("message", function (e) {
+    if (String(e.origin).indexOf("youtube.com") < 0) { return; }
+    var f = getIframe();
+    if (!f || e.source !== f.contentWindow) { return; }
+    P.heard = true;
+    var d = e.data;
+    if (typeof d === "string") { try { d = JSON.parse(d); } catch (err) { return; } }
+    if (!d) { return; }
+    if ((d.event === "infoDelivery" || d.event === "initialDelivery") && d.info) {
+      var i = d.info;
+      if (typeof i.currentTime === "number") { P.cur = i.currentTime; }
+      if (typeof i.duration === "number" && i.duration > 0) { P.dur = i.duration; }
+      if (typeof i.playerState === "number") { P.st = i.playerState; }
+      refreshCtl();
+    } else if (d.event === "onStateChange" && typeof d.info === "number") {
+      P.st = d.info;
+      refreshCtl();
+    }
+  }, false);
+
+  /* ---------- pantalla completa ---------- */
+  function nativeFsElement() {
+    return document.fullscreenElement || document.webkitFullscreenElement ||
+           document.msFullscreenElement || document.mozFullScreenElement || null;
+  }
+  function nativeFsRequest(el) {
+    var fn = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen ||
+             el.mozRequestFullScreen;
+    if (!fn) { return; }
+    try {
+      var p = fn.call(el);
+      if (p && p.catch) { p.catch(function () {}); }
+    } catch (e) {}
+    try {
+      var o = window.screen && screen.orientation;
+      if (o && o.lock) { var pr = o.lock("landscape"); if (pr && pr.catch) { pr.catch(function () {}); } }
+    } catch (e2) {}
+  }
+  function nativeFsExit() {
+    var fn = document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen ||
+             document.mozCancelFullScreen;
+    if (fn && nativeFsElement()) {
+      try { var p = fn.call(document); if (p && p.catch) { p.catch(function () {}); } } catch (e) {}
+    }
+    try { if (window.screen && screen.orientation && screen.orientation.unlock) { screen.orientation.unlock(); } }
+    catch (e2) {}
+  }
+  function setFs(on) {
+    $("vwrap").className = on ? "fs" : "";
+    if (!on) { nativeFsExit(); }
+  }
+  function toggleFs() {
+    if (/,fs$/.test(location.hash)) { history.back(); return; }
+    nativeFsRequest($("vwrap"));
+    location.hash = "v=" + currentId + ",fs";
+  }
+  function onNativeFsChange() {
+    // si el usuario sale del modo nativo (gesto/botón del sistema), salimos también del nuestro
+    if (!nativeFsElement() && /,fs$/.test(location.hash)) { history.back(); }
+  }
+  ["fullscreenchange", "webkitfullscreenchange", "MSFullscreenChange", "mozfullscreenchange"]
+    .forEach(function (n) { document.addEventListener(n, onNativeFsChange, false); });
+
+  /* ---------- reproductor: abrir / cerrar ---------- */
   function openPlayer(id) {
     if (currentId === id) { return; }
     currentId = id;
+    P.heard = false; P.cur = 0; P.dur = 0; P.st = 1; P.lastUser = 0;
     $("player").style.display = "block";
     $("player").scrollTop = 0;
-    document.body.style.overflow = "hidden";
+    syncOverflow();
     var origin = encodeURIComponent(location.protocol + "//" + location.host);
     $("frame").innerHTML =
       '<iframe src="https://www.youtube.com/embed/' + encodeURIComponent(id) +
-      "?autoplay=1&playsinline=1&rel=0&modestbranding=1&origin=" + origin +
+      "?autoplay=1&playsinline=1&rel=0&modestbranding=1&enablejsapi=1&origin=" + origin +
       '" allowfullscreen allow="autoplay; fullscreen; encrypted-media"></iframe>';
+    var f = getIframe();
+    if (f) { f.onload = startListening; }
+    startListening();
+    refreshCtl();
+    $("seek").value = 0;
     $("pfall").href = "https://www.youtube.com/watch?v=" + encodeURIComponent(id);
     $("ptitle").textContent = "";
     $("pchan").textContent = "";
+    $("pchan").removeAttribute("data-ch");
     $("pstats").textContent = "";
     $("pdesc").textContent = "";
+    // comentarios: reinicio
+    cm.id = id; cm.loaded = false; cm.token = ""; cm.loading = false; cm.gen++;
+    $("cmlist").innerHTML = "";
+    $("ptab-comm").textContent = "Comentarios";
+    showTab("desc");
+
     call("videos", { part: "snippet,statistics", id: id }).then(function (d) {
       if (currentId !== id || !d.items.length) { return; }
       var v = d.items[0];
       $("ptitle").textContent = decode(v.snippet.title);
       $("pchan").textContent = v.snippet.channelTitle;
+      if (v.snippet.channelId) { $("pchan").setAttribute("data-ch", v.snippet.channelId); }
       $("pstats").textContent = fmtNum(v.statistics.viewCount) + " vistas \u2022 " +
         fmtAgo(v.snippet.publishedAt) +
         (v.statistics.likeCount ? " \u2022 " + fmtNum(v.statistics.likeCount) + " me gusta" : "");
       $("pdesc").textContent = v.snippet.description || "";
+      if (v.statistics.commentCount) {
+        $("ptab-comm").textContent = "Comentarios (" + fmtNum(v.statistics.commentCount) + ")";
+      }
     }).catch(function () {});
   }
   function closePlayer() {
     currentId = "";
+    stopListening();
+    setFs(false);
     $("frame").innerHTML = "";
     $("player").style.display = "none";
-    document.body.style.overflow = "";
+    syncOverflow();
   }
 
-  // El botón físico "atrás" del teléfono usa el historial: cada video es un hash
+  /* ---------- comentarios ---------- */
+  function showTab(which) {
+    var c = which === "comm";
+    $("ptab-desc").className = "tab" + (c ? "" : " on");
+    $("ptab-comm").className = "tab" + (c ? " on" : "");
+    $("pdesc").style.display = c ? "none" : "block";
+    $("pcomm").style.display = c ? "block" : "none";
+    if (c && !cm.loaded) { cm.loaded = true; loadComments(true); }
+  }
+  function setOrder(o) {
+    if (cm.order === o) { return; }
+    cm.order = o;
+    var bs = $("cmord").getElementsByTagName("button");
+    for (var i = 0; i < bs.length; i++) {
+      bs[i].className = "ord" + (bs[i].getAttribute("data-order") === o ? " on" : "");
+    }
+    loadComments(true);
+  }
+  function commentHtml(s, id, replies, isReply) {
+    var ach = s.authorChannelId && s.authorChannelId.value;
+    return '<div class="cm' + (isReply ? " rp" : "") + '">' +
+      '<div class="ca"><span' + (ach ? ' class="chan" data-ch="' + esc(ach) + '"' : "") + ">" +
+      esc(s.authorDisplayName) + '</span><span class="cd">' + esc(fmtAgo(s.publishedAt)) + "</span></div>" +
+      '<div class="ct">' + esc(s.textDisplay) + "</div>" +
+      '<div class="cl">' + (s.likeCount ? esc(fmtNum(s.likeCount)) + " me gusta" : "") +
+      (replies ? '<button class="rbtn" type="button" data-reply="' + esc(id) + '">Ver ' + replies +
+        (replies === 1 ? " respuesta" : " respuestas") + "</button>" : "") + "</div>" +
+      (replies ? '<div id="r-' + esc(id) + '" style="display:none"></div>' : "") + "</div>";
+  }
+  function loadComments(reset) {
+    if (cm.loading || !cm.id) { return; }
+    cm.loading = true;
+    var gen = ++cm.gen, vid = cm.id;
+    if (reset) { cm.token = ""; $("cmlist").innerHTML = '<div class="spin">Cargando&hellip;</div>'; }
+    else {
+      removeEl("cmmore");
+      $("cmlist").insertAdjacentHTML("beforeend", '<div class="spin" id="cmspin">Cargando&hellip;</div>');
+    }
+    call("commentThreads", { part: "snippet", videoId: vid, order: cm.order, maxResults: 20,
+                             textFormat: "plainText", pageToken: cm.token }).then(function (d) {
+      if (gen !== cm.gen) { return; }
+      cm.loading = false;
+      removeEl("cmmore"); removeEl("cmspin");
+      if (reset) { $("cmlist").innerHTML = ""; }
+      if (!d.items.length && reset) { $("cmlist").innerHTML = '<div class="msg">Todavía no hay comentarios.</div>'; return; }
+      var h = "";
+      for (var i = 0; i < d.items.length; i++) {
+        var t = d.items[i], top = t.snippet.topLevelComment;
+        h += commentHtml(top.snippet, top.id, t.snippet.totalReplyCount || 0, false);
+      }
+      $("cmlist").insertAdjacentHTML("beforeend", h);
+      cm.token = d.nextPageToken || "";
+      if (cm.token) {
+        $("cmlist").insertAdjacentHTML("beforeend",
+          '<button class="more" id="cmmore" type="button" style="width:100%;margin:10px 0">Más comentarios</button>');
+      }
+    }).catch(function (e) {
+      if (gen !== cm.gen) { return; }
+      cm.loading = false;
+      removeEl("cmmore"); removeEl("cmspin");
+      var html = '<div class="msg err">' + esc(e.message) + "</div>";
+      if (reset) { $("cmlist").innerHTML = html; } else { $("cmlist").insertAdjacentHTML("beforeend", html); }
+    });
+  }
+  function toggleReplies(parentId, btn) {
+    var box = $("r-" + parentId);
+    if (!box) { return; }
+    if (box.getAttribute("data-loaded") === "1") {
+      var hidden = box.style.display === "none";
+      box.style.display = hidden ? "block" : "none";
+      btn.textContent = hidden ? "Ocultar respuestas" : "Ver respuestas";
+      return;
+    }
+    if (box.getAttribute("data-busy") === "1") { return; }
+    box.setAttribute("data-busy", "1");
+    box.style.display = "block";
+    box.innerHTML = '<div class="spin" style="padding:8px">Cargando&hellip;</div>';
+    call("comments", { part: "snippet", parentId: parentId, maxResults: 50, textFormat: "plainText" })
+      .then(function (d) {
+        var h = "";
+        for (var i = 0; i < d.items.length; i++) { h += commentHtml(d.items[i].snippet, d.items[i].id, 0, true); }
+        box.innerHTML = h || '<div class="msg">No se pudieron cargar las respuestas.</div>';
+        box.setAttribute("data-loaded", "1");
+        box.removeAttribute("data-busy");
+        btn.textContent = "Ocultar respuestas";
+      }).catch(function (e) {
+        box.innerHTML = '<div class="msg err">' + esc(e.message) + "</div>";
+        box.removeAttribute("data-busy");
+      });
+  }
+
+  /* ---------- navegación por hash (el botón "atrás" del teléfono funciona) ---------- */
   function route() {
-    var m = /^#v=([\w-]{6,20})$/.exec(location.hash);
-    if (m) { openPlayer(m[1]); } else { closePlayer(); }
+    var h = location.hash;
+    var mv = /^#v=([\w-]{6,20})(,fs)?$/.exec(h);
+    var mc = /^#c=([\w-]{10,40})$/.exec(h);
+    if (mv) {
+      openPlayer(mv[1]);
+      setFs(!!mv[2]);
+    } else {
+      closePlayer();
+      if (mc) { openChannel(mc[1]); } else { closeChannel(); }
+    }
   }
 
   /* ---------- ajustes ---------- */
@@ -372,7 +777,11 @@ button, input { font-family: inherit; font-size: 1em; }
     $("q").blur();
     state.query = q;
     setTab("search");
+    if (location.hash) { location.hash = ""; }
     load(true);
+  }
+  function goBack() {
+    if (location.hash) { history.back(); } else { closePlayer(); closeChannel(); }
   }
 
   $("go").onclick = doSearch;
@@ -381,8 +790,7 @@ button, input { font-family: inherit; font-size: 1em; }
   };
   $("tab-trend").onclick = function () { setTab("trend"); load(true); };
   $("tab-search").onclick = function () {
-    if (state.query) { setTab("search"); load(true); }
-    else { $("q").focus(); }
+    if (state.query) { setTab("search"); load(true); } else { $("q").focus(); }
   };
   $("gear").onclick = openCfg;
   $("close").onclick = closeCfg;
@@ -394,20 +802,38 @@ button, input { font-family: inherit; font-size: 1em; }
     closeCfg();
     if (k) { load(true); }
   };
-  $("back").onclick = function () {
-    if (/^#v=/.test(location.hash)) { history.back(); } else { closePlayer(); }
+  $("back").onclick = goBack;
+  $("cback").onclick = goBack;
+  $("pp").onclick = function () {
+    cmd(P.st === 1 ? "pauseVideo" : "playVideo");
+    P.st = P.st === 1 ? 2 : 1;
+    refreshCtl();
   };
-  $("list").onclick = function (e) {
-    var el = e.target;
-    while (el && el !== this) {
+  $("fsbtn").onclick = toggleFs;
+  $("ptab-desc").onclick = function () { showTab("desc"); };
+  $("ptab-comm").onclick = function () { showTab("comm"); };
+  $("seek").oninput = function () {
+    P.lastUser = Date.now();
+    $("tcur").textContent = fmtClock(+this.value);
+  };
+  $("seek").onchange = function () { seekTo(+this.value); };
+
+  document.addEventListener("click", function (e) {
+    var el = e.target, a;
+    while (el && el !== document) {
       if (el.id === "morebtn") { load(false); return; }
-      if (el.getAttribute && el.getAttribute("data-id")) {
-        location.hash = "v=" + el.getAttribute("data-id");
-        return;
+      if (el.id === "cmorebtn") { loadChan(false); return; }
+      if (el.id === "cmmore") { loadComments(false); return; }
+      if (el.getAttribute) {
+        if ((a = el.getAttribute("data-seek")) !== null) { seekBy(+a); return; }
+        if ((a = el.getAttribute("data-reply"))) { toggleReplies(a, el); return; }
+        if ((a = el.getAttribute("data-order"))) { setOrder(a); return; }
+        if ((a = el.getAttribute("data-ch"))) { location.hash = "c=" + a; return; }
+        if ((a = el.getAttribute("data-id"))) { location.hash = "v=" + a; return; }
       }
       el = el.parentNode;
     }
-  };
+  }, false);
   window.addEventListener("hashchange", route, false);
 
   /* ---------- inicio ---------- */
