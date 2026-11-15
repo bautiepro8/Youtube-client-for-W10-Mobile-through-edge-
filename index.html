@@ -258,7 +258,7 @@ button, input, select { font-family: inherit; font-size: 1em; }
       apiKey: "Clave de API", region: "Región de tendencias (código de 2 letras)", language: "Idioma",
       save: "Guardar", close: "Cerrar", fullscreen: "Pantalla completa", pause: "Pausa", play: "Play",
       subs: "Subtítulos", on: "Sí", off: "No", quality: "Calidad", auto: "Auto", qNow: "Reproduciendo en",
-      qNote: "YouTube puede ignorar este ajuste. Si no cambia, usá el engranaje del propio video.",
+      qNote: "Elegir una calidad agranda el reproductor por dentro para que YouTube use esa resolución. Si se traba, volvé a Auto.",
       loading: "Cargando\u2026",
       start: "Para empezar, abrí <b>Ajustes</b> (\u2699) y pegá tu clave de API de YouTube.",
       noVideos: "No se encontraron videos.", moreRes: "Más resultados", moreVid: "Más videos",
@@ -285,7 +285,7 @@ button, input, select { font-family: inherit; font-size: 1em; }
       apiKey: "API key", region: "Trending region (2-letter code)", language: "Language",
       save: "Save", close: "Close", fullscreen: "Full screen", pause: "Pause", play: "Play",
       subs: "Subtitles", on: "On", off: "Off", quality: "Quality", auto: "Auto", qNow: "Playing at",
-      qNote: "YouTube may ignore this setting. If nothing changes, use the gear inside the video.",
+      qNote: "Choosing a quality enlarges the player internally so YouTube uses that resolution. If playback stutters, go back to Auto.",
       loading: "Loading\u2026",
       start: "To begin, open <b>Settings</b> (\u2699) and paste your YouTube API key.",
       noVideos: "No videos found.", moreRes: "More results", moreVid: "More videos",
@@ -312,7 +312,7 @@ button, input, select { font-family: inherit; font-size: 1em; }
       apiKey: "Chave de API", region: "Região das tendências (código de 2 letras)", language: "Idioma",
       save: "Salvar", close: "Fechar", fullscreen: "Tela cheia", pause: "Pausar", play: "Play",
       subs: "Legendas", on: "Sim", off: "Não", quality: "Qualidade", auto: "Auto", qNow: "Reproduzindo em",
-      qNote: "O YouTube pode ignorar este ajuste. Se nada mudar, use a engrenagem do próprio vídeo.",
+      qNote: "Escolher uma qualidade amplia o player internamente para que o YouTube use essa resolução. Se travar, volte para Auto.",
       loading: "Carregando\u2026",
       start: "Para começar, abra <b>Configurações</b> (\u2699) e cole a sua chave de API do YouTube.",
       noVideos: "Nenhum vídeo encontrado.", moreRes: "Mais resultados", moreVid: "Mais vídeos",
@@ -339,7 +339,7 @@ button, input, select { font-family: inherit; font-size: 1em; }
       apiKey: "Clé d’API", region: "Région des tendances (code à 2 lettres)", language: "Langue",
       save: "Enregistrer", close: "Fermer", fullscreen: "Plein écran", pause: "Pause", play: "Lecture",
       subs: "Sous-titres", on: "Oui", off: "Non", quality: "Qualité", auto: "Auto", qNow: "Lecture en",
-      qNote: "YouTube peut ignorer ce réglage. Si rien ne change, utilisez la roue dentée de la vidéo.",
+      qNote: "Choisir une qualité agrandit le lecteur en interne pour que YouTube utilise cette résolution. En cas de saccades, revenez en Auto.",
       loading: "Chargement\u2026",
       start: "Pour commencer, ouvrez <b>Réglages</b> (\u2699) et collez votre clé d’API YouTube.",
       noVideos: "Aucune vidéo trouvée.", moreRes: "Plus de résultats", moreVid: "Plus de vidéos",
@@ -721,6 +721,27 @@ button, input, select { font-family: inherit; font-size: 1em; }
   var QNAMES = { hd2160: "2160p", hd1440: "1440p", hd1080: "1080p", hd720: "720p", large: "480p",
                  medium: "360p", small: "240p", tiny: "144p", highres: "4K+" };
   function qLabel(k) { return k === "auto" ? t("auto") : (QNAMES[k] || k); }
+  var QDIMS = { hd1080: [1920, 1080], hd720: [1280, 720], large: [854, 480], medium: [640, 360],
+                small: [426, 240], tiny: [256, 144] };
+  // YouTube elige la resolución según el tamaño del reproductor: lo hacemos "grande" por dentro
+  // y lo achicamos con una transformación para que entre en la pantalla.
+  function sizeFrame() {
+    var f = getIframe();
+    if (!f) { return; }
+    var d = QDIMS[getQ()], box = $("frame"), st = f.style;
+    if (!d) {
+      st.width = "100%"; st.height = "100%"; st.left = "0px"; st.top = "0px"; st.transform = "none";
+      return;
+    }
+    var bw = box.clientWidth, bh = box.clientHeight;
+    if (!bw || !bh) { return; }
+    var k = Math.min(bw / d[0], bh / d[1]);
+    st.width = d[0] + "px"; st.height = d[1] + "px";
+    st.left = Math.round((bw - d[0] * k) / 2) + "px";
+    st.top = Math.round((bh - d[1] * k) / 2) + "px";
+    st.transformOrigin = "0 0";
+    st.transform = "scale(" + k + ")";
+  }
 
   function updateBtns() {
     var cc = ccOn(), q = getQ();
@@ -746,6 +767,7 @@ button, input, select { font-family: inherit; font-size: 1em; }
       applyQuality();
       setTimeout(applyQuality, 1500);
     }
+    sizeFrame();
     updateBtns();
     closeQ();
   }
@@ -823,6 +845,7 @@ button, input, select { font-family: inherit; font-size: 1em; }
   function setFs(on) {
     $("vwrap").className = on ? "fs" : "";
     if (on) { closeQ(); } else { nativeFsExit(); }
+    sizeFrame();
   }
   function toggleFs() {
     if (/,fs$/.test(location.hash)) { history.back(); return; }
@@ -867,6 +890,7 @@ button, input, select { font-family: inherit; font-size: 1em; }
       '" allowfullscreen allow="autoplay; fullscreen; encrypted-media"></iframe>';
     var f = getIframe();
     if (f) { f.onload = startListening; }
+    sizeFrame();
     startListening();
     refreshCtl();
     updateBtns();
@@ -1098,6 +1122,8 @@ button, input, select { font-family: inherit; font-size: 1em; }
     }
   }, false);
   window.addEventListener("hashchange", route, false);
+  window.addEventListener("resize", sizeFrame, false);
+  window.addEventListener("orientationchange", function () { setTimeout(sizeFrame, 300); }, false);
 
   /* ---------- inicio ---------- */
   applyLang();
