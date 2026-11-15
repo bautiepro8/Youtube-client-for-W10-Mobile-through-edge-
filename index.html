@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#12161c">
+<title>Tubo</title>
+<style>
+html, body { margin: 0; padding: 0; background: #12161c; color: #e8edf2;
+  font-family: "Segoe UI", Arial, sans-serif; font-size: 15px; }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+a { color: inherit; }
+button, input { font-family: inherit; font-size: 1em; }
+
+#top { position: fixed; top: 0; left: 0; right: 0; z-index: 10; background: #12161c;
+  border-bottom: 1px solid #2a323d; }
+#bar { display: -ms-flexbox; display: flex; padding: 8px; }
+#q { -ms-flex: 1; flex: 1; min-width: 0; height: 40px; padding: 0 12px; border: 1px solid #3a4452;
+  background: #1c222b; color: #e8edf2; border-radius: 4px 0 0 4px; outline: none; }
+#q:focus { border-color: #f2b134; }
+#go { width: 48px; height: 40px; border: 0; background: #f2b134; color: #12161c;
+  font-weight: 700; border-radius: 0 4px 4px 0; }
+#gear { width: 40px; height: 40px; margin-left: 6px; border: 1px solid #3a4452; background: transparent;
+  color: #e8edf2; border-radius: 4px; }
+#tabs { display: -ms-flexbox; display: flex; }
+.tab { -ms-flex: 1; flex: 1; text-align: center; padding: 10px 0; background: none; border: 0;
+  color: #8e9aab; border-bottom: 3px solid transparent; }
+.tab.on { color: #f2b134; border-bottom-color: #f2b134; font-weight: 600; }
+
+#main { padding-top: 106px; padding-bottom: 24px; }
+.item { display: block; width: 100%; padding: 0 0 14px 0; text-align: left; background: none; border: 0;
+  color: inherit; cursor: pointer; }
+.thumb { position: relative; width: 100%; padding-top: 56.25%; background: #1c222b; overflow: hidden; }
+.thumb img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: block; }
+.dur { position: absolute; right: 6px; bottom: 6px; padding: 1px 5px; background: rgba(0,0,0,.82);
+  font-size: 12px; font-weight: 600; border-radius: 2px; }
+.meta { padding: 8px 12px 0 12px; }
+.ttl { font-size: 15px; line-height: 20px; max-height: 40px; overflow: hidden; font-weight: 600; }
+.sub { margin-top: 3px; font-size: 12.5px; color: #8e9aab; }
+
+.msg { margin: 24px 16px; padding: 14px; background: #1c222b; border-left: 3px solid #f2b134;
+  line-height: 1.45; }
+.msg.err { border-left-color: #e5534b; }
+.more { display: block; width: calc(100% - 24px); margin: 4px 12px; height: 44px; border: 1px solid #3a4452;
+  background: transparent; color: #e8edf2; border-radius: 4px; }
+.spin { text-align: center; color: #8e9aab; padding: 24px; }
+
+#player { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 20;
+  background: #12161c; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+#pbar { height: 44px; display: -ms-flexbox; display: flex; -ms-flex-align: center; align-items: center; }
+#back { height: 44px; padding: 0 16px; border: 0; background: none; color: #f2b134; font-weight: 600; }
+#frame { position: relative; width: 100%; padding-top: 56.25%; background: #000; }
+#frame iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+#pinfo { padding: 12px; }
+#ptitle { font-size: 17px; font-weight: 600; line-height: 22px; }
+#pchan { margin-top: 6px; color: #f2b134; }
+#pstats { margin-top: 2px; font-size: 12.5px; color: #8e9aab; }
+#pdesc { margin-top: 14px; white-space: pre-wrap; word-wrap: break-word; line-height: 1.45;
+  color: #c4ccd6; font-size: 14px; }
+#pfall { display: inline-block; margin-top: 12px; color: #8e9aab; font-size: 13px; }
+
+#cfg { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 30;
+  background: #12161c; overflow-y: auto; padding: 16px; }
+#cfg h2 { margin: 8px 0 12px 0; font-size: 20px; }
+#cfg label { display: block; margin: 14px 0 4px 0; color: #8e9aab; font-size: 13px; }
+#cfg input { width: 100%; height: 40px; padding: 0 10px; border: 1px solid #3a4452; background: #1c222b;
+  color: #e8edf2; border-radius: 4px; }
+#cfg p { color: #8e9aab; line-height: 1.45; font-size: 13.5px; }
+.btn { height: 44px; padding: 0 20px; margin: 18px 8px 0 0; border: 0; border-radius: 4px;
+  background: #f2b134; color: #12161c; font-weight: 700; }
+.btn.alt { background: transparent; color: #e8edf2; border: 1px solid #3a4452; }
+</style>
+</head>
+<body>
+
+<div id="top">
+  <div id="bar">
+    <input id="q" type="search" placeholder="Buscar en YouTube" autocomplete="off">
+    <button id="go" type="button">Ir</button>
+    <button id="gear" type="button" title="Ajustes">&#9881;</button>
+  </div>
+  <div id="tabs">
+    <button class="tab on" id="tab-trend" type="button">Tendencias</button>
+    <button class="tab" id="tab-search" type="button">Resultados</button>
+  </div>
+</div>
+
+<div id="main"><div id="list"></div></div>
+
+<div id="player">
+  <div id="pbar"><button id="back" type="button">&#8592; Volver</button></div>
+  <div id="frame"></div>
+  <div id="pinfo">
+    <div id="ptitle"></div>
+    <div id="pchan"></div>
+    <div id="pstats"></div>
+    <div id="pdesc"></div>
+    <a id="pfall" target="_blank" rel="noopener">Abrir en YouTube</a>
+  </div>
+</div>
+
+<div id="cfg">
+  <h2>Ajustes</h2>
+  <p>Pegá tu clave de la API de datos de YouTube v3. Se guarda solo en este teléfono.</p>
+  <label for="key">Clave de API</label>
+  <input id="key" type="text" autocomplete="off" autocapitalize="off" spellcheck="false">
+  <label for="reg">Región de tendencias (código de 2 letras)</label>
+  <input id="reg" type="text" maxlength="2" autocapitalize="characters" autocomplete="off">
+  <button class="btn" id="save" type="button">Guardar</button>
+  <button class="btn alt" id="close" type="button">Cerrar</button>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var API = "https://www.googleapis.com/youtube/v3/";
+  var store = {
+    get: function (k) { try { return window.localStorage.getItem(k); } catch (e) { return null; } },
+    set: function (k, v) { try { window.localStorage.setItem(k, v); } catch (e) {} }
+  };
+  function $(id) { return document.getElementById(id); }
+
+  var state = { mode: "trend", query: "", token: "", loading: false, gen: 0 };
+
+  function getKey() { return store.get("yt_key") || ""; }
+  function getRegion() { return (store.get("yt_region") || "AR").toUpperCase(); }
+
+  /* ---------- utilidades ---------- */
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function decode(s) {
+    var t = document.createElement("textarea");
+    t.innerHTML = s || "";
+    return t.value;
+  }
+  function fmtDur(iso) {
+    var m = /^P(?:(\d+)D)?T?(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/.exec(iso || "");
+    if (!m) { return ""; }
+    var h = (+m[1] || 0) * 24 + (+m[2] || 0), mi = +m[3] || 0, s = +m[4] || 0;
+    function p(n) { return n < 10 ? "0" + n : "" + n; }
+    return h ? h + ":" + p(mi) + ":" + p(s) : mi + ":" + p(s);
+  }
+  function fmtNum(n) {
+    n = +n;
+    if (isNaN(n)) { return ""; }
+    if (n >= 1e6) { return (Math.round(n / 1e5) / 10).toString().replace(".", ",") + " M"; }
+    if (n >= 1e3) { return Math.round(n / 1e3) + " mil"; }
+    return String(n);
+  }
+  function fmtAgo(iso) {
+    var d = new Date(iso), s = (Date.now() - d.getTime()) / 1000;
+    if (isNaN(s)) { return ""; }
+    var u = [[31536000, "año", "años"], [2592000, "mes", "meses"], [604800, "semana", "semanas"],
+             [86400, "día", "días"], [3600, "hora", "horas"], [60, "minuto", "minutos"]];
+    for (var i = 0; i < u.length; i++) {
+      var n = Math.floor(s / u[i][0]);
+      if (n >= 1) { return "hace " + n + " " + (n === 1 ? u[i][1] : u[i][2]); }
+    }
+    return "recién";
+  }
+
+  /* ---------- red ---------- */
+  function qs(obj) {
+    var a = [];
+    for (var k in obj) {
+      if (obj.hasOwnProperty(k) && obj[k] !== "" && obj[k] != null) {
+        a.push(encodeURIComponent(k) + "=" + encodeURIComponent(obj[k]));
+      }
+    }
+    return a.join("&");
+  }
+  function call(endpoint, params) {
+    params.key = getKey();
+    return new Promise(function (resolve, reject) {
+      var x = new XMLHttpRequest();
+      x.open("GET", API + endpoint + "?" + qs(params), true);
+      x.onreadystatechange = function () {
+        if (x.readyState !== 4) { return; }
+        var data = null;
+        try { data = JSON.parse(x.responseText); } catch (e) {}
+        if (x.status >= 200 && x.status < 300 && data) { resolve(data); return; }
+        var reason = data && data.error && data.error.errors && data.error.errors[0] &&
+                     data.error.errors[0].reason;
+        var err = new Error(
+          reason === "quotaExceeded" ? "Se agotó la cuota diaria de la API. Probá mañana." :
+          reason === "keyInvalid" || reason === "badRequest" && /key/i.test(x.responseText)
+            ? "La clave de API no es válida. Revisala en Ajustes." :
+          reason === "accessNotConfigured" || reason === "forbidden"
+            ? "La API de datos de YouTube v3 no está activada para esta clave." :
+          x.status === 0 ? "Sin conexión con YouTube. Revisá tu internet." :
+          "Error " + x.status + (reason ? " (" + reason + ")" : ""));
+        reject(err);
+      };
+      x.send();
+    });
+  }
+
+  /* ---------- listado ---------- */
+  function showMsg(html, isErr) {
+    $("list").innerHTML = '<div class="msg' + (isErr ? " err" : "") + '">' + html + "</div>";
+  }
+  function setTab(mode) {
+    state.mode = mode;
+    $("tab-trend").className = "tab" + (mode === "trend" ? " on" : "");
+    $("tab-search").className = "tab" + (mode === "search" ? " on" : "");
+  }
+  function removeMoreBtn() {
+    var m = $("morebtn");
+    if (m && m.parentNode) { m.parentNode.removeChild(m); }
+    var s = $("spin");
+    if (s && s.parentNode) { s.parentNode.removeChild(s); }
+  }
+
+  function itemHtml(v) {
+    return '<button class="item" type="button" data-id="' + esc(v.id) + '">' +
+      '<div class="thumb"><img src="' + esc(v.thumb) + '" alt="">' +
+      (v.dur ? '<span class="dur">' + esc(v.dur) + "</span>" : "") + "</div>" +
+      '<div class="meta"><div class="ttl">' + esc(v.title) + "</div>" +
+      '<div class="sub">' + esc(v.channel) +
+      (v.views ? " &bull; " + esc(v.views) + " vistas" : "") +
+      (v.ago ? " &bull; " + esc(v.ago) : "") + "</div></div></button>";
+  }
+
+  function thumbOf(sn) {
+    var t = sn.thumbnails || {};
+    return (t.medium || t.high || t.default || {}).url || "";
+  }
+
+  // Dado un arreglo de ids, trae duración y vistas y devuelve un mapa
+  function details(ids) {
+    if (!ids.length) { return Promise.resolve({}); }
+    return call("videos", { part: "contentDetails,statistics", id: ids.join(",") })
+      .then(function (d) {
+        var map = {};
+        for (var i = 0; i < d.items.length; i++) {
+          map[d.items[i].id] = d.items[i];
+        }
+        return map;
+      })
+      .catch(function () { return {}; });
+  }
+
+  function load(reset) {
+    if (state.loading) { return; }
+    if (!getKey()) { openCfg(); return; }
+    state.loading = true;
+    var gen = ++state.gen;
+    if (reset) {
+      state.token = "";
+      $("list").innerHTML = '<div class="spin">Cargando&hellip;</div>';
+      window.scrollTo(0, 0);
+    } else {
+      var mb = $("morebtn");
+      if (mb) { mb.parentNode.removeChild(mb); }
+      $("list").insertAdjacentHTML("beforeend", '<div class="spin" id="spin">Cargando&hellip;</div>');
+    }
+
+    var req;
+    if (state.mode === "trend") {
+      req = call("videos", {
+        part: "snippet,contentDetails,statistics", chart: "mostPopular",
+        regionCode: getRegion(), maxResults: 20, pageToken: state.token
+      }).then(function (d) {
+        return { token: d.nextPageToken || "", vids: d.items.map(function (i) {
+          return { id: i.id, title: decode(i.snippet.title), channel: i.snippet.channelTitle,
+                   thumb: thumbOf(i.snippet), dur: fmtDur(i.contentDetails.duration),
+                   views: fmtNum(i.statistics.viewCount), ago: fmtAgo(i.snippet.publishedAt) };
+        }) };
+      });
+    } else {
+      req = call("search", {
+        part: "snippet", type: "video", maxResults: 20, q: state.query,
+        regionCode: getRegion(), safeSearch: "none", pageToken: state.token
+      }).then(function (d) {
+        var ids = d.items.map(function (i) { return i.id.videoId; });
+        return details(ids).then(function (map) {
+          return { token: d.nextPageToken || "", vids: d.items.map(function (i) {
+            var x = map[i.id.videoId];
+            return { id: i.id.videoId, title: decode(i.snippet.title), channel: i.snippet.channelTitle,
+                     thumb: thumbOf(i.snippet), dur: x ? fmtDur(x.contentDetails.duration) : "",
+                     views: x ? fmtNum(x.statistics.viewCount) : "", ago: fmtAgo(i.snippet.publishedAt) };
+          }) };
+        });
+      });
+    }
+
+    req.then(function (r) {
+      if (gen !== state.gen) { return; }
+      state.loading = false;
+      removeMoreBtn();
+      if (reset) { $("list").innerHTML = ""; }
+      if (!r.vids.length && reset) { showMsg("No se encontraron videos."); return; }
+      var h = "";
+      for (var i = 0; i < r.vids.length; i++) { h += itemHtml(r.vids[i]); }
+      $("list").insertAdjacentHTML("beforeend", h);
+      state.token = r.token;
+      if (r.token) {
+        $("list").insertAdjacentHTML("beforeend",
+          '<button class="more" id="morebtn" type="button">Más resultados</button>');
+      }
+    }).catch(function (e) {
+      if (gen !== state.gen) { return; }
+      state.loading = false;
+      removeMoreBtn();
+      if (reset) { showMsg(esc(e.message), true); }
+      else {
+        $("list").insertAdjacentHTML("beforeend",
+          '<div class="msg err">' + esc(e.message) + "</div>");
+      }
+    });
+  }
+
+  /* ---------- reproductor ---------- */
+  var currentId = "";
+  function openPlayer(id) {
+    if (currentId === id) { return; }
+    currentId = id;
+    $("player").style.display = "block";
+    $("player").scrollTop = 0;
+    document.body.style.overflow = "hidden";
+    var origin = encodeURIComponent(location.protocol + "//" + location.host);
+    $("frame").innerHTML =
+      '<iframe src="https://www.youtube.com/embed/' + encodeURIComponent(id) +
+      "?autoplay=1&playsinline=1&rel=0&modestbranding=1&origin=" + origin +
+      '" allowfullscreen allow="autoplay; fullscreen; encrypted-media"></iframe>';
+    $("pfall").href = "https://www.youtube.com/watch?v=" + encodeURIComponent(id);
+    $("ptitle").textContent = "";
+    $("pchan").textContent = "";
+    $("pstats").textContent = "";
+    $("pdesc").textContent = "";
+    call("videos", { part: "snippet,statistics", id: id }).then(function (d) {
+      if (currentId !== id || !d.items.length) { return; }
+      var v = d.items[0];
+      $("ptitle").textContent = decode(v.snippet.title);
+      $("pchan").textContent = v.snippet.channelTitle;
+      $("pstats").textContent = fmtNum(v.statistics.viewCount) + " vistas \u2022 " +
+        fmtAgo(v.snippet.publishedAt) +
+        (v.statistics.likeCount ? " \u2022 " + fmtNum(v.statistics.likeCount) + " me gusta" : "");
+      $("pdesc").textContent = v.snippet.description || "";
+    }).catch(function () {});
+  }
+  function closePlayer() {
+    currentId = "";
+    $("frame").innerHTML = "";
+    $("player").style.display = "none";
+    document.body.style.overflow = "";
+  }
+
+  // El botón físico "atrás" del teléfono usa el historial: cada video es un hash
+  function route() {
+    var m = /^#v=([\w-]{6,20})$/.exec(location.hash);
+    if (m) { openPlayer(m[1]); } else { closePlayer(); }
+  }
+
+  /* ---------- ajustes ---------- */
+  function openCfg() {
+    $("key").value = getKey();
+    $("reg").value = getRegion();
+    $("cfg").style.display = "block";
+  }
+  function closeCfg() { $("cfg").style.display = "none"; }
+
+  /* ---------- eventos ---------- */
+  function doSearch() {
+    var q = $("q").value.replace(/^\s+|\s+$/g, "");
+    if (!q) { return; }
+    $("q").blur();
+    state.query = q;
+    setTab("search");
+    load(true);
+  }
+
+  $("go").onclick = doSearch;
+  $("q").onkeydown = function (e) {
+    if (e.keyCode === 13 || e.key === "Enter") { e.preventDefault(); doSearch(); }
+  };
+  $("tab-trend").onclick = function () { setTab("trend"); load(true); };
+  $("tab-search").onclick = function () {
+    if (state.query) { setTab("search"); load(true); }
+    else { $("q").focus(); }
+  };
+  $("gear").onclick = openCfg;
+  $("close").onclick = closeCfg;
+  $("save").onclick = function () {
+    var k = $("key").value.replace(/\s+/g, "");
+    var r = $("reg").value.replace(/\s+/g, "").toUpperCase() || "AR";
+    store.set("yt_key", k);
+    store.set("yt_region", r);
+    closeCfg();
+    if (k) { load(true); }
+  };
+  $("back").onclick = function () {
+    if (/^#v=/.test(location.hash)) { history.back(); } else { closePlayer(); }
+  };
+  $("list").onclick = function (e) {
+    var el = e.target;
+    while (el && el !== this) {
+      if (el.id === "morebtn") { load(false); return; }
+      if (el.getAttribute && el.getAttribute("data-id")) {
+        location.hash = "v=" + el.getAttribute("data-id");
+        return;
+      }
+      el = el.parentNode;
+    }
+  };
+  window.addEventListener("hashchange", route, false);
+
+  /* ---------- inicio ---------- */
+  if (!getKey()) {
+    showMsg("Para empezar, abrí <b>Ajustes</b> (&#9881;) y pegá tu clave de API de YouTube.");
+    openCfg();
+  } else {
+    load(true);
+  }
+  route();
+})();
+</script>
+</body>
+</html>
