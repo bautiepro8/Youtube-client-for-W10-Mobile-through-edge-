@@ -11,7 +11,7 @@ html, body { margin: 0; padding: 0; background: #12161c; color: #e8edf2;
   font-family: "Segoe UI", Arial, sans-serif; font-size: 15px; }
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 a { color: inherit; }
-button, input { font-family: inherit; font-size: 1em; }
+button, input, select { font-family: inherit; font-size: 1em; }
 
 #top { position: fixed; top: 0; left: 0; right: 0; z-index: 10; background: #12161c;
   border-bottom: 1px solid #2a323d; }
@@ -77,17 +77,20 @@ button, input { font-family: inherit; font-size: 1em; }
 #seek::-ms-fill-upper { background: #3a4452; }
 #seek::-ms-thumb { width: 20px; height: 20px; border: 0; border-radius: 50%; background: #f2b134; }
 #seek::-ms-tooltip { display: none; }
-#btnrow { display: -ms-flexbox; display: flex; }
+#btnrow, #btnrow2 { display: -ms-flexbox; display: flex; }
+#btnrow2 { margin-top: 6px; }
 .cb { -ms-flex: 1; flex: 1; height: 40px; margin: 0 3px; border: 1px solid #3a4452; background: #1c222b;
-  color: #e8edf2; border-radius: 4px; padding: 0; font-weight: 600; }
+  color: #e8edf2; border-radius: 4px; padding: 0 4px; font-weight: 600; }
+.cb.sm { height: 36px; font-size: 13px; overflow: hidden; white-space: nowrap; }
+.cb.act { border-color: #f2b134; color: #f2b134; }
 .cb.wide { -ms-flex: 1.6; flex: 1.6; background: #f2b134; color: #12161c; border-color: #f2b134; }
 .cb svg { width: 20px; height: 20px; vertical-align: middle; }
+
+/* pantalla completa: se ocultan por completo los controles propios */
 #vwrap.fs { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 40;
   display: -ms-flexbox; display: flex; -ms-flex-direction: column; flex-direction: column; }
 #vwrap.fs #frame { -ms-flex: 1; flex: 1; padding-top: 0; min-height: 0; }
-#vwrap.fs #ctl { padding: 2px 8px 4px 8px; }
-#vwrap.fs #seekrow { height: 30px; }
-#vwrap.fs .cb { height: 34px; }
+#vwrap.fs #ctl { display: none; }
 
 #pinfo { padding: 12px; }
 #ptitle { font-size: 17px; font-weight: 600; line-height: 22px; }
@@ -113,12 +116,25 @@ button, input { font-family: inherit; font-size: 1em; }
 .rbtn { margin-left: 10px; padding: 4px 0; border: 0; background: none; color: #f2b134; font-size: 12px;
   font-weight: 600; }
 
+/* ----- menú de calidad ----- */
+#qmenu { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 45;
+  background: rgba(0,0,0,.6); }
+#qsheet { position: absolute; left: 0; right: 0; bottom: 0; background: #1c222b; padding: 14px 12px 16px 12px;
+  max-height: 85%; overflow-y: auto; }
+#qtitle { font-weight: 600; font-size: 16px; }
+#qnow { color: #8e9aab; font-size: 12.5px; margin: 2px 0 8px 0; min-height: 16px; }
+.qo { display: block; width: 100%; height: 44px; text-align: left; padding: 0 12px; border: 0;
+  border-bottom: 1px solid #2a323d; background: none; color: #e8edf2; }
+.qo.on { color: #f2b134; font-weight: 700; }
+.qo.dis { opacity: .35; }
+#qnote { color: #8e9aab; font-size: 12px; line-height: 1.4; margin-top: 10px; }
+
 #cfg { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 50;
   background: #12161c; overflow-y: auto; padding: 16px; }
 #cfg h2 { margin: 8px 0 12px 0; font-size: 20px; }
 #cfg label { display: block; margin: 14px 0 4px 0; color: #8e9aab; font-size: 13px; }
-#cfg input { width: 100%; height: 40px; padding: 0 10px; border: 1px solid #3a4452; background: #1c222b;
-  color: #e8edf2; border-radius: 4px; }
+#cfg input, #cfg select { width: 100%; height: 40px; padding: 0 10px; border: 1px solid #3a4452;
+  background: #1c222b; color: #e8edf2; border-radius: 4px; }
 #cfg p { color: #8e9aab; line-height: 1.45; font-size: 13.5px; }
 .btn { height: 44px; padding: 0 20px; margin: 18px 8px 0 0; border: 0; border-radius: 4px;
   background: #f2b134; color: #12161c; font-weight: 700; }
@@ -129,26 +145,26 @@ button, input { font-family: inherit; font-size: 1em; }
 
 <div id="top">
   <div id="bar">
-    <input id="q" type="search" placeholder="Buscar en YouTube" autocomplete="off">
-    <button id="go" type="button">Ir</button>
-    <button id="gear" type="button" title="Ajustes">&#9881;</button>
+    <input id="q" type="search" data-i18n-ph="searchPh" autocomplete="off">
+    <button id="go" type="button">&#9658;</button>
+    <button id="gear" type="button" data-i18n-title="settings">&#9881;</button>
   </div>
   <div id="tabs">
-    <button class="tab on" id="tab-trend" type="button">Tendencias</button>
-    <button class="tab" id="tab-search" type="button">Resultados</button>
+    <button class="tab on" id="tab-trend" type="button" data-i18n="trend"></button>
+    <button class="tab" id="tab-search" type="button" data-i18n="results"></button>
   </div>
 </div>
 
 <div id="main"><div id="list"></div></div>
 
 <div id="chan">
-  <div id="cbar"><button id="cback" type="button">&#8592; Volver</button></div>
+  <div id="cbar"><button id="cback" type="button" data-i18n="backBtn"></button></div>
   <div id="chead"></div>
   <div id="clist"></div>
 </div>
 
 <div id="player">
-  <div id="pbar"><button id="back" type="button">&#8592; Volver</button></div>
+  <div id="pbar"><button id="back" type="button" data-i18n="backBtn"></button></div>
   <div id="vwrap">
     <div id="frame"></div>
     <div id="ctl">
@@ -160,13 +176,17 @@ button, input { font-family: inherit; font-size: 1em; }
       <div id="btnrow">
         <button class="cb" type="button" data-seek="-30">&minus;30</button>
         <button class="cb" type="button" data-seek="-10">&minus;10</button>
-        <button class="cb wide" type="button" id="pp">Pausa</button>
+        <button class="cb wide" type="button" id="pp"></button>
         <button class="cb" type="button" data-seek="10">+10</button>
         <button class="cb" type="button" data-seek="30">+30</button>
-        <button class="cb" type="button" id="fsbtn" title="Pantalla completa">
+        <button class="cb" type="button" id="fsbtn" data-i18n-title="fullscreen">
           <svg viewBox="0 0 20 20" fill="none" stroke="#e8edf2" stroke-width="2">
             <path d="M3 8V3h5M12 3h5v5M17 12v5h-5M8 17H3v-5"/></svg>
         </button>
+      </div>
+      <div id="btnrow2">
+        <button class="cb sm" type="button" id="ccbtn"></button>
+        <button class="cb sm" type="button" id="qbtn"></button>
       </div>
     </div>
   </div>
@@ -175,30 +195,46 @@ button, input { font-family: inherit; font-size: 1em; }
     <div id="pchan"></div>
     <div id="pstats"></div>
     <div id="ptabs">
-      <button class="tab on" id="ptab-desc" type="button">Descripci&oacute;n</button>
-      <button class="tab" id="ptab-comm" type="button">Comentarios</button>
+      <button class="tab on" id="ptab-desc" type="button" data-i18n="desc"></button>
+      <button class="tab" id="ptab-comm" type="button" data-i18n="comments"></button>
     </div>
     <div id="pdesc"></div>
     <div id="pcomm">
       <div id="cmord">
-        <button class="ord on" type="button" data-order="relevance">Populares</button>
-        <button class="ord" type="button" data-order="time">Recientes</button>
+        <button class="ord on" type="button" data-order="relevance" data-i18n="popular"></button>
+        <button class="ord" type="button" data-order="time" data-i18n="recent"></button>
       </div>
       <div id="cmlist"></div>
     </div>
-    <a id="pfall" target="_blank" rel="noopener">Abrir en YouTube</a>
+    <a id="pfall" target="_blank" rel="noopener" data-i18n="openYT"></a>
+  </div>
+</div>
+
+<div id="qmenu">
+  <div id="qsheet">
+    <div id="qtitle"></div>
+    <div id="qnow"></div>
+    <div id="qopts"></div>
+    <div id="qnote"></div>
   </div>
 </div>
 
 <div id="cfg">
-  <h2>Ajustes</h2>
-  <p>Peg&aacute; tu clave de la API de datos de YouTube v3. Se guarda solo en este tel&eacute;fono.</p>
-  <label for="key">Clave de API</label>
+  <h2 data-i18n="settings"></h2>
+  <p data-i18n="cfgIntro"></p>
+  <label for="key" data-i18n="apiKey"></label>
   <input id="key" type="text" autocomplete="off" autocapitalize="off" spellcheck="false">
-  <label for="reg">Regi&oacute;n de tendencias (c&oacute;digo de 2 letras)</label>
+  <label for="reg" data-i18n="region"></label>
   <input id="reg" type="text" maxlength="2" autocapitalize="characters" autocomplete="off">
-  <button class="btn" id="save" type="button">Guardar</button>
-  <button class="btn alt" id="close" type="button">Cerrar</button>
+  <label for="lang" data-i18n="language"></label>
+  <select id="lang">
+    <option value="es">Espa&ntilde;ol</option>
+    <option value="en">English</option>
+    <option value="pt">Portugu&ecirc;s</option>
+    <option value="fr">Fran&ccedil;ais</option>
+  </select>
+  <button class="btn" id="save" type="button" data-i18n="save"></button>
+  <button class="btn alt" id="close" type="button" data-i18n="close"></button>
 </div>
 
 <script>
@@ -212,14 +248,152 @@ button, input { font-family: inherit; font-size: 1em; }
   };
   function $(id) { return document.getElementById(id); }
 
+  /* ---------- idiomas ---------- */
+  var LANGS = {
+    es: {
+      trend: "Tendencias", results: "Resultados", searchPh: "Buscar en YouTube", settings: "Ajustes",
+      backBtn: "\u2190 Volver", desc: "Descripción", comments: "Comentarios", popular: "Populares",
+      recent: "Recientes", openYT: "Abrir en YouTube",
+      cfgIntro: "Pegá tu clave de la API de datos de YouTube v3. Se guarda solo en este teléfono.",
+      apiKey: "Clave de API", region: "Región de tendencias (código de 2 letras)", language: "Idioma",
+      save: "Guardar", close: "Cerrar", fullscreen: "Pantalla completa", pause: "Pausa", play: "Play",
+      subs: "Subtítulos", on: "Sí", off: "No", quality: "Calidad", auto: "Auto", qNow: "Reproduciendo en",
+      qNote: "YouTube puede ignorar este ajuste. Si no cambia, usá el engranaje del propio video.",
+      loading: "Cargando\u2026",
+      start: "Para empezar, abrí <b>Ajustes</b> (\u2699) y pegá tu clave de API de YouTube.",
+      noVideos: "No se encontraron videos.", moreRes: "Más resultados", moreVid: "Más videos",
+      moreCom: "Más comentarios", views: "vistas", likes: "me gusta", subsCount: "suscriptores",
+      subsHidden: "Suscriptores ocultos", videosN: "videos", noChannel: "No se encontró el canal.",
+      noChanVideos: "Este canal no tiene videos.", noComments: "Todavía no hay comentarios.",
+      viewReply1: "Ver {n} respuesta", viewReplyN: "Ver {n} respuestas", hideReplies: "Ocultar respuestas",
+      showReplies: "Ver respuestas", replyFail: "No se pudieron cargar las respuestas.",
+      eQuota: "Se agotó la cuota diaria de la API. Probá mañana.",
+      eComments: "Los comentarios están desactivados en este video.",
+      eKey: "La clave de API no es válida. Revisala en Ajustes.",
+      eNotEnabled: "La API de datos de YouTube v3 no está activada para esta clave.",
+      eOffline: "Sin conexión con YouTube. Revisá tu internet.", eGeneric: "Error",
+      numK: "{n} mil", numM: "{n} M", dec: ",",
+      agoNow: "recién", agoFmt: "hace {n} {u}",
+      units: [["año", "años"], ["mes", "meses"], ["semana", "semanas"], ["día", "días"],
+              ["hora", "horas"], ["minuto", "minutos"]]
+    },
+    en: {
+      trend: "Trending", results: "Results", searchPh: "Search YouTube", settings: "Settings",
+      backBtn: "\u2190 Back", desc: "Description", comments: "Comments", popular: "Top",
+      recent: "Newest", openYT: "Open on YouTube",
+      cfgIntro: "Paste your YouTube Data API v3 key. It is stored only on this phone.",
+      apiKey: "API key", region: "Trending region (2-letter code)", language: "Language",
+      save: "Save", close: "Close", fullscreen: "Full screen", pause: "Pause", play: "Play",
+      subs: "Subtitles", on: "On", off: "Off", quality: "Quality", auto: "Auto", qNow: "Playing at",
+      qNote: "YouTube may ignore this setting. If nothing changes, use the gear inside the video.",
+      loading: "Loading\u2026",
+      start: "To begin, open <b>Settings</b> (\u2699) and paste your YouTube API key.",
+      noVideos: "No videos found.", moreRes: "More results", moreVid: "More videos",
+      moreCom: "More comments", views: "views", likes: "likes", subsCount: "subscribers",
+      subsHidden: "Subscribers hidden", videosN: "videos", noChannel: "Channel not found.",
+      noChanVideos: "This channel has no videos.", noComments: "No comments yet.",
+      viewReply1: "View {n} reply", viewReplyN: "View {n} replies", hideReplies: "Hide replies",
+      showReplies: "Show replies", replyFail: "Could not load the replies.",
+      eQuota: "The daily API quota is used up. Try again tomorrow.",
+      eComments: "Comments are turned off for this video.",
+      eKey: "The API key is not valid. Check it in Settings.",
+      eNotEnabled: "The YouTube Data API v3 is not enabled for this key.",
+      eOffline: "Cannot reach YouTube. Check your connection.", eGeneric: "Error",
+      numK: "{n}K", numM: "{n}M", dec: ".",
+      agoNow: "just now", agoFmt: "{n} {u} ago",
+      units: [["year", "years"], ["month", "months"], ["week", "weeks"], ["day", "days"],
+              ["hour", "hours"], ["minute", "minutes"]]
+    },
+    pt: {
+      trend: "Em alta", results: "Resultados", searchPh: "Pesquisar no YouTube", settings: "Configurações",
+      backBtn: "\u2190 Voltar", desc: "Descrição", comments: "Comentários", popular: "Populares",
+      recent: "Recentes", openYT: "Abrir no YouTube",
+      cfgIntro: "Cole a sua chave da API de dados do YouTube v3. Ela fica salva só neste telefone.",
+      apiKey: "Chave de API", region: "Região das tendências (código de 2 letras)", language: "Idioma",
+      save: "Salvar", close: "Fechar", fullscreen: "Tela cheia", pause: "Pausar", play: "Play",
+      subs: "Legendas", on: "Sim", off: "Não", quality: "Qualidade", auto: "Auto", qNow: "Reproduzindo em",
+      qNote: "O YouTube pode ignorar este ajuste. Se nada mudar, use a engrenagem do próprio vídeo.",
+      loading: "Carregando\u2026",
+      start: "Para começar, abra <b>Configurações</b> (\u2699) e cole a sua chave de API do YouTube.",
+      noVideos: "Nenhum vídeo encontrado.", moreRes: "Mais resultados", moreVid: "Mais vídeos",
+      moreCom: "Mais comentários", views: "visualizações", likes: "curtidas", subsCount: "inscritos",
+      subsHidden: "Inscritos ocultos", videosN: "vídeos", noChannel: "Canal não encontrado.",
+      noChanVideos: "Este canal não tem vídeos.", noComments: "Ainda não há comentários.",
+      viewReply1: "Ver {n} resposta", viewReplyN: "Ver {n} respostas", hideReplies: "Ocultar respostas",
+      showReplies: "Ver respostas", replyFail: "Não foi possível carregar as respostas.",
+      eQuota: "A cota diária da API acabou. Tente amanhã.",
+      eComments: "Os comentários estão desativados neste vídeo.",
+      eKey: "A chave de API não é válida. Verifique em Configurações.",
+      eNotEnabled: "A API de dados do YouTube v3 não está ativada para esta chave.",
+      eOffline: "Sem conexão com o YouTube. Verifique a internet.", eGeneric: "Erro",
+      numK: "{n} mil", numM: "{n} mi", dec: ",",
+      agoNow: "agora mesmo", agoFmt: "há {n} {u}",
+      units: [["ano", "anos"], ["mês", "meses"], ["semana", "semanas"], ["dia", "dias"],
+              ["hora", "horas"], ["minuto", "minutos"]]
+    },
+    fr: {
+      trend: "Tendances", results: "Résultats", searchPh: "Rechercher sur YouTube", settings: "Réglages",
+      backBtn: "\u2190 Retour", desc: "Description", comments: "Commentaires", popular: "Populaires",
+      recent: "Récents", openYT: "Ouvrir sur YouTube",
+      cfgIntro: "Collez votre clé de l’API YouTube Data v3. Elle reste enregistrée uniquement sur ce téléphone.",
+      apiKey: "Clé d’API", region: "Région des tendances (code à 2 lettres)", language: "Langue",
+      save: "Enregistrer", close: "Fermer", fullscreen: "Plein écran", pause: "Pause", play: "Lecture",
+      subs: "Sous-titres", on: "Oui", off: "Non", quality: "Qualité", auto: "Auto", qNow: "Lecture en",
+      qNote: "YouTube peut ignorer ce réglage. Si rien ne change, utilisez la roue dentée de la vidéo.",
+      loading: "Chargement\u2026",
+      start: "Pour commencer, ouvrez <b>Réglages</b> (\u2699) et collez votre clé d’API YouTube.",
+      noVideos: "Aucune vidéo trouvée.", moreRes: "Plus de résultats", moreVid: "Plus de vidéos",
+      moreCom: "Plus de commentaires", views: "vues", likes: "j’aime", subsCount: "abonnés",
+      subsHidden: "Abonnés masqués", videosN: "vidéos", noChannel: "Chaîne introuvable.",
+      noChanVideos: "Cette chaîne n’a pas de vidéos.", noComments: "Pas encore de commentaires.",
+      viewReply1: "Voir {n} réponse", viewReplyN: "Voir {n} réponses", hideReplies: "Masquer les réponses",
+      showReplies: "Voir les réponses", replyFail: "Impossible de charger les réponses.",
+      eQuota: "Le quota quotidien de l’API est épuisé. Réessayez demain.",
+      eComments: "Les commentaires sont désactivés pour cette vidéo.",
+      eKey: "La clé d’API n’est pas valide. Vérifiez-la dans les réglages.",
+      eNotEnabled: "L’API YouTube Data v3 n’est pas activée pour cette clé.",
+      eOffline: "Impossible de joindre YouTube. Vérifiez votre connexion.", eGeneric: "Erreur",
+      numK: "{n} k", numM: "{n} M", dec: ",",
+      agoNow: "à l’instant", agoFmt: "il y a {n} {u}",
+      units: [["an", "ans"], ["mois", "mois"], ["semaine", "semaines"], ["jour", "jours"],
+              ["heure", "heures"], ["minute", "minutes"]]
+    }
+  };
+
+  function detectLang() {
+    var n = (navigator.language || navigator.userLanguage || "es").toLowerCase().slice(0, 2);
+    return LANGS[n] ? n : "es";
+  }
+  var lang = store.get("yt_lang");
+  if (!lang || !LANGS[lang]) { lang = detectLang(); }
+
+  function t(k, v) {
+    var s = LANGS[lang][k];
+    if (s == null) { s = LANGS.es[k]; }
+    if (v) { for (var x in v) { if (v.hasOwnProperty(x)) { s = s.split("{" + x + "}").join(v[x]); } } }
+    return s;
+  }
+  function applyLang() {
+    document.documentElement.lang = lang;
+    var i, els = document.querySelectorAll("[data-i18n]");
+    for (i = 0; i < els.length; i++) { els[i].textContent = t(els[i].getAttribute("data-i18n")); }
+    els = document.querySelectorAll("[data-i18n-ph]");
+    for (i = 0; i < els.length; i++) { els[i].setAttribute("placeholder", t(els[i].getAttribute("data-i18n-ph"))); }
+    els = document.querySelectorAll("[data-i18n-title]");
+    for (i = 0; i < els.length; i++) { els[i].setAttribute("title", t(els[i].getAttribute("data-i18n-title"))); }
+  }
+
   var state = { mode: "trend", query: "", token: "", loading: false, gen: 0 };
   var cs = { id: "", uploads: "", token: "", loading: false, gen: 0 };
   var cm = { id: "", loaded: false, token: "", order: "relevance", loading: false, gen: 0 };
-  var P = { heard: false, cur: 0, dur: 0, st: 1, lastUser: 0, timer: null, tries: 0 };
+  var P = { heard: false, cur: 0, dur: 0, st: 1, lastUser: 0, timer: null, tries: 0,
+            qNow: "", avail: null, qApplied: false };
   var currentId = "";
 
   function getKey() { return store.get("yt_key") || ""; }
   function getRegion() { return (store.get("yt_region") || "AR").toUpperCase(); }
+  function ccOn() { return store.get("yt_cc") === "1"; }
+  function getQ() { return store.get("yt_q") || "auto"; }
 
   /* ---------- utilidades ---------- */
   function esc(s) {
@@ -228,9 +402,9 @@ button, input { font-family: inherit; font-size: 1em; }
     });
   }
   function decode(s) {
-    var t = document.createElement("textarea");
-    t.innerHTML = s || "";
-    return t.value;
+    var d = document.createElement("textarea");
+    d.innerHTML = s || "";
+    return d.value;
   }
   function p2(n) { return n < 10 ? "0" + n : "" + n; }
   function fmtDur(iso) {
@@ -247,20 +421,19 @@ button, input { font-family: inherit; font-size: 1em; }
   function fmtNum(n) {
     n = +n;
     if (isNaN(n)) { return ""; }
-    if (n >= 1e6) { return (Math.round(n / 1e5) / 10).toString().replace(".", ",") + " M"; }
-    if (n >= 1e3) { return Math.round(n / 1e3) + " mil"; }
+    if (n >= 1e6) { return t("numM", { n: String(Math.round(n / 1e5) / 10).replace(".", t("dec")) }); }
+    if (n >= 1e3) { return t("numK", { n: Math.round(n / 1e3) }); }
     return String(n);
   }
   function fmtAgo(iso) {
     var d = new Date(iso), s = (Date.now() - d.getTime()) / 1000;
     if (isNaN(s)) { return ""; }
-    var u = [[31536000, "año", "años"], [2592000, "mes", "meses"], [604800, "semana", "semanas"],
-             [86400, "día", "días"], [3600, "hora", "horas"], [60, "minuto", "minutos"]];
-    for (var i = 0; i < u.length; i++) {
-      var n = Math.floor(s / u[i][0]);
-      if (n >= 1) { return "hace " + n + " " + (n === 1 ? u[i][1] : u[i][2]); }
+    var secs = [31536000, 2592000, 604800, 86400, 3600, 60], units = LANGS[lang].units;
+    for (var i = 0; i < secs.length; i++) {
+      var n = Math.floor(s / secs[i]);
+      if (n >= 1) { return t("agoFmt", { n: n, u: n === 1 ? units[i][0] : units[i][1] }); }
     }
-    return "recién";
+    return t("agoNow");
   }
 
   /* ---------- red ---------- */
@@ -286,16 +459,14 @@ button, input { font-family: inherit; font-size: 1em; }
         var reason = data && data.error && data.error.errors && data.error.errors[0] &&
                      data.error.errors[0].reason;
         var msg;
-        if (reason === "quotaExceeded") { msg = "Se agotó la cuota diaria de la API. Probá mañana."; }
-        else if (reason === "commentsDisabled") { msg = "Los comentarios están desactivados en este video."; }
+        if (reason === "quotaExceeded") { msg = t("eQuota"); }
+        else if (reason === "commentsDisabled") { msg = t("eComments"); }
         else if (reason === "keyInvalid" || (reason === "badRequest" && /key/i.test(x.responseText))) {
-          msg = "La clave de API no es válida. Revisala en Ajustes.";
+          msg = t("eKey");
         }
-        else if (reason === "accessNotConfigured" || reason === "forbidden") {
-          msg = "La API de datos de YouTube v3 no está activada para esta clave.";
-        }
-        else if (x.status === 0) { msg = "Sin conexión con YouTube. Revisá tu internet."; }
-        else { msg = "Error " + x.status + (reason ? " (" + reason + ")" : ""); }
+        else if (reason === "accessNotConfigured" || reason === "forbidden") { msg = t("eNotEnabled"); }
+        else if (x.status === 0) { msg = t("eOffline"); }
+        else { msg = t("eGeneric") + " " + x.status + (reason ? " (" + reason + ")" : ""); }
         reject(new Error(msg));
       };
       x.send();
@@ -315,6 +486,7 @@ button, input { font-family: inherit; font-size: 1em; }
     var m = $(id);
     if (m && m.parentNode) { m.parentNode.removeChild(m); }
   }
+  function spinHtml(id) { return '<div class="spin"' + (id ? ' id="' + id + '"' : "") + ">" + t("loading") + "</div>"; }
 
   function itemHtml(v) {
     return '<div class="item" data-id="' + esc(v.id) + '">' +
@@ -323,15 +495,14 @@ button, input { font-family: inherit; font-size: 1em; }
       '<div class="meta"><div class="ttl">' + esc(v.title) + "</div>" +
       '<div class="sub"><span class="chan"' + (v.ch ? ' data-ch="' + esc(v.ch) + '"' : "") + ">" +
       esc(v.channel) + "</span>" +
-      (v.views ? " &bull; " + esc(v.views) + " vistas" : "") +
+      (v.views ? " &bull; " + esc(v.views) + " " + esc(t("views")) : "") +
       (v.ago ? " &bull; " + esc(v.ago) : "") + "</div></div></div>";
   }
 
   function thumbOf(sn) {
-    var t = sn.thumbnails || {};
-    return (t.medium || t.high || t.default || {}).url || "";
+    var th = sn.thumbnails || {};
+    return (th.medium || th.high || th.default || {}).url || "";
   }
-  // Convierte un item del endpoint "videos" (snippet+contentDetails+statistics)
   function vidFromVideo(i) {
     return { id: i.id, title: decode(i.snippet.title), channel: i.snippet.channelTitle,
              ch: i.snippet.channelId, thumb: thumbOf(i.snippet),
@@ -356,11 +527,11 @@ button, input { font-family: inherit; font-size: 1em; }
     var gen = ++state.gen;
     if (reset) {
       state.token = "";
-      $("list").innerHTML = '<div class="spin">Cargando&hellip;</div>';
+      $("list").innerHTML = spinHtml();
       window.scrollTo(0, 0);
     } else {
       removeEl("morebtn");
-      $("list").insertAdjacentHTML("beforeend", '<div class="spin" id="spin">Cargando&hellip;</div>');
+      $("list").insertAdjacentHTML("beforeend", spinHtml("spin"));
     }
 
     var req;
@@ -374,7 +545,7 @@ button, input { font-family: inherit; font-size: 1em; }
     } else {
       req = call("search", {
         part: "snippet", type: "video", maxResults: 20, q: state.query,
-        regionCode: getRegion(), safeSearch: "none", pageToken: state.token
+        regionCode: getRegion(), relevanceLanguage: lang, safeSearch: "none", pageToken: state.token
       }).then(function (d) {
         var ids = d.items.map(function (i) { return i.id.videoId; });
         return details(ids).then(function (map) {
@@ -394,14 +565,14 @@ button, input { font-family: inherit; font-size: 1em; }
       state.loading = false;
       removeEl("morebtn"); removeEl("spin");
       if (reset) { $("list").innerHTML = ""; }
-      if (!r.vids.length && reset) { showMsg("No se encontraron videos."); return; }
+      if (!r.vids.length && reset) { showMsg(esc(t("noVideos"))); return; }
       var h = "";
       for (var i = 0; i < r.vids.length; i++) { h += itemHtml(r.vids[i]); }
       $("list").insertAdjacentHTML("beforeend", h);
       state.token = r.token;
       if (r.token) {
         $("list").insertAdjacentHTML("beforeend",
-          '<button class="more" id="morebtn" type="button">Más resultados</button>');
+          '<button class="more" id="morebtn" type="button">' + esc(t("moreRes")) + "</button>");
       }
     }).catch(function (e) {
       if (gen !== state.gen) { return; }
@@ -425,15 +596,17 @@ button, input { font-family: inherit; font-size: 1em; }
     $("chan").style.display = "block";
     $("chan").scrollTop = 0;
     $("chead").innerHTML = "";
-    $("clist").innerHTML = '<div class="spin">Cargando&hellip;</div>';
+    $("clist").innerHTML = spinHtml();
     syncOverflow();
     call("channels", { part: "snippet,statistics,contentDetails", id: id }).then(function (d) {
       if (gen !== cs.gen) { return; }
-      if (!d.items || !d.items.length) { $("clist").innerHTML = '<div class="msg err">No se encontró el canal.</div>'; return; }
+      if (!d.items || !d.items.length) {
+        $("clist").innerHTML = '<div class="msg err">' + esc(t("noChannel")) + "</div>"; return;
+      }
       var c = d.items[0], st = c.statistics || {};
-      var subs = st.hiddenSubscriberCount ? "Suscriptores ocultos" :
-                 (st.subscriberCount ? fmtNum(st.subscriberCount) + " suscriptores" : "");
-      var vc = st.videoCount ? fmtNum(st.videoCount) + " videos" : "";
+      var subs = st.hiddenSubscriberCount ? t("subsHidden") :
+                 (st.subscriberCount ? fmtNum(st.subscriberCount) + " " + t("subsCount") : "");
+      var vc = st.videoCount ? fmtNum(st.videoCount) + " " + t("videosN") : "";
       var th = c.snippet.thumbnails || {};
       var av = (th.default || th.medium || {}).url || "";
       $("chead").innerHTML = (av ? '<img src="' + esc(av) + '" alt="">' : "") +
@@ -441,7 +614,7 @@ button, input { font-family: inherit; font-size: 1em; }
         esc(subs + (subs && vc ? " \u2022 " : "") + vc) + "</div></div>";
       cs.uploads = c.contentDetails && c.contentDetails.relatedPlaylists &&
                    c.contentDetails.relatedPlaylists.uploads;
-      if (!cs.uploads) { $("clist").innerHTML = '<div class="msg">Este canal no tiene videos.</div>'; return; }
+      if (!cs.uploads) { $("clist").innerHTML = '<div class="msg">' + esc(t("noChanVideos")) + "</div>"; return; }
       loadChan(true);
     }).catch(function (e) {
       if (gen !== cs.gen) { return; }
@@ -458,10 +631,10 @@ button, input { font-family: inherit; font-size: 1em; }
     if (cs.loading || !cs.uploads) { return; }
     cs.loading = true;
     var gen = cs.gen;
-    if (reset) { cs.token = ""; $("clist").innerHTML = '<div class="spin">Cargando&hellip;</div>'; }
+    if (reset) { cs.token = ""; $("clist").innerHTML = spinHtml(); }
     else {
       removeEl("cmorebtn");
-      $("clist").insertAdjacentHTML("beforeend", '<div class="spin" id="cspin">Cargando&hellip;</div>');
+      $("clist").insertAdjacentHTML("beforeend", spinHtml("cspin"));
     }
     call("playlistItems", { part: "contentDetails", playlistId: cs.uploads, maxResults: 20,
                             pageToken: cs.token }).then(function (d) {
@@ -485,14 +658,16 @@ button, input { font-family: inherit; font-size: 1em; }
       cs.loading = false;
       removeEl("cmorebtn"); removeEl("cspin");
       if (reset) { $("clist").innerHTML = ""; }
-      if (!r.vids.length && reset) { $("clist").innerHTML = '<div class="msg">Este canal no tiene videos.</div>'; return; }
+      if (!r.vids.length && reset) {
+        $("clist").innerHTML = '<div class="msg">' + esc(t("noChanVideos")) + "</div>"; return;
+      }
       var h = "";
       for (var i = 0; i < r.vids.length; i++) { h += itemHtml(r.vids[i]); }
       $("clist").insertAdjacentHTML("beforeend", h);
       cs.token = r.token;
       if (r.token) {
         $("clist").insertAdjacentHTML("beforeend",
-          '<button class="more" id="cmorebtn" type="button">Más videos</button>');
+          '<button class="more" id="cmorebtn" type="button">' + esc(t("moreVid")) + "</button>");
       }
     }).catch(function (e) {
       if (gen !== cs.gen) { return; }
@@ -527,18 +702,68 @@ button, input { font-family: inherit; font-size: 1em; }
     var sk = $("seek");
     if (P.dur > 0) { sk.max = Math.floor(P.dur); }
     if (Date.now() - P.lastUser > 1500) { sk.value = Math.floor(P.cur); }
-    $("pp").textContent = P.st === 1 ? "Pausa" : "Play";
+    $("pp").textContent = P.st === 1 ? t("pause") : t("play");
   }
-  function seekTo(t) {
-    if (P.dur > 0) { t = Math.min(t, P.dur - 1); }
-    t = Math.max(0, t);
-    P.cur = t;
+  function seekTo(s) {
+    if (P.dur > 0) { s = Math.min(s, P.dur - 1); }
+    s = Math.max(0, s);
+    P.cur = s;
     P.lastUser = Date.now();
-    cmd("seekTo", [t, true]);
-    $("seek").value = Math.floor(t);
-    $("tcur").textContent = fmtClock(t);
+    cmd("seekTo", [s, true]);
+    $("seek").value = Math.floor(s);
+    $("tcur").textContent = fmtClock(s);
   }
   function seekBy(delta) { seekTo(P.cur + delta); }
+
+  /* ---------- calidad ---------- */
+  var QOPTS = [["auto", ""], ["hd1080", "1080p"], ["hd720", "720p"], ["large", "480p"],
+               ["medium", "360p"], ["small", "240p"], ["tiny", "144p"]];
+  var QNAMES = { hd2160: "2160p", hd1440: "1440p", hd1080: "1080p", hd720: "720p", large: "480p",
+                 medium: "360p", small: "240p", tiny: "144p", highres: "4K+" };
+  function qLabel(k) { return k === "auto" ? t("auto") : (QNAMES[k] || k); }
+
+  function updateBtns() {
+    var cc = ccOn(), q = getQ();
+    $("ccbtn").textContent = t("subs") + ": " + (cc ? t("on") : t("off"));
+    $("ccbtn").className = "cb sm" + (cc ? " act" : "");
+    var ql = qLabel(q);
+    if (q === "auto" && P.qNow && P.qNow !== "unknown" && QNAMES[P.qNow]) { ql += " (" + QNAMES[P.qNow] + ")"; }
+    $("qbtn").textContent = t("quality") + ": " + ql;
+    $("qbtn").className = "cb sm" + (q !== "auto" ? " act" : "");
+  }
+  function applyQuality() {
+    var q = getQ();
+    if (q === "auto") { return; }
+    cmd("setPlaybackQuality", [q]);
+    cmd("setPlaybackQualityRange", [q, q]);
+  }
+  function setQuality(q) {
+    store.set("yt_q", q);
+    if (q === "auto") {
+      cmd("setPlaybackQuality", ["default"]);
+      cmd("setPlaybackQualityRange", ["tiny", "highres"]);
+    } else {
+      applyQuality();
+      setTimeout(applyQuality, 1500);
+    }
+    updateBtns();
+    closeQ();
+  }
+  function openQ() {
+    var saved = getQ(), h = "";
+    for (var i = 0; i < QOPTS.length; i++) {
+      var k = QOPTS[i][0];
+      var dis = P.avail && k !== "auto" && P.avail.indexOf(k) < 0;
+      h += '<button class="qo' + (saved === k ? " on" : "") + (dis ? " dis" : "") +
+           '" type="button" data-q="' + k + '">' + esc(k === "auto" ? t("auto") : QOPTS[i][1]) + "</button>";
+    }
+    $("qopts").innerHTML = h;
+    $("qtitle").textContent = t("quality");
+    $("qnow").textContent = (P.qNow && P.qNow !== "unknown") ? t("qNow") + ": " + qLabel(P.qNow) : "";
+    $("qnote").textContent = t("qNote");
+    $("qmenu").style.display = "block";
+  }
+  function closeQ() { $("qmenu").style.display = "none"; }
 
   window.addEventListener("message", function (e) {
     if (String(e.origin).indexOf("youtube.com") < 0) { return; }
@@ -549,11 +774,19 @@ button, input { font-family: inherit; font-size: 1em; }
     if (typeof d === "string") { try { d = JSON.parse(d); } catch (err) { return; } }
     if (!d) { return; }
     if ((d.event === "infoDelivery" || d.event === "initialDelivery") && d.info) {
-      var i = d.info;
+      var i = d.info, changed = false;
       if (typeof i.currentTime === "number") { P.cur = i.currentTime; }
       if (typeof i.duration === "number" && i.duration > 0) { P.dur = i.duration; }
       if (typeof i.playerState === "number") { P.st = i.playerState; }
+      if (typeof i.playbackQuality === "string" && i.playbackQuality !== P.qNow) { P.qNow = i.playbackQuality; changed = true; }
+      if (i.availableQualityLevels && i.availableQualityLevels.length) { P.avail = i.availableQualityLevels; }
       refreshCtl();
+      if (changed) { updateBtns(); }
+      if (P.st === 1 && !P.qApplied) {
+        P.qApplied = true;
+        applyQuality();
+        setTimeout(applyQuality, 1500);
+      }
     } else if (d.event === "onStateChange" && typeof d.info === "number") {
       P.st = d.info;
       refreshCtl();
@@ -589,7 +822,7 @@ button, input { font-family: inherit; font-size: 1em; }
   }
   function setFs(on) {
     $("vwrap").className = on ? "fs" : "";
-    if (!on) { nativeFsExit(); }
+    if (on) { closeQ(); } else { nativeFsExit(); }
   }
   function toggleFs() {
     if (/,fs$/.test(location.hash)) { history.back(); return; }
@@ -597,29 +830,46 @@ button, input { font-family: inherit; font-size: 1em; }
     location.hash = "v=" + currentId + ",fs";
   }
   function onNativeFsChange() {
-    // si el usuario sale del modo nativo (gesto/botón del sistema), salimos también del nuestro
     if (!nativeFsElement() && /,fs$/.test(location.hash)) { history.back(); }
   }
   ["fullscreenchange", "webkitfullscreenchange", "MSFullscreenChange", "mozfullscreenchange"]
     .forEach(function (n) { document.addEventListener(n, onNativeFsChange, false); });
 
-  /* ---------- reproductor: abrir / cerrar ---------- */
+  /* ---------- reproductor: abrir / cerrar / subtítulos ---------- */
+  function embedUrl(id, start) {
+    var origin = encodeURIComponent(location.protocol + "//" + location.host);
+    return "https://www.youtube.com/embed/" + encodeURIComponent(id) +
+      "?autoplay=1&playsinline=1&rel=0&modestbranding=1&enablejsapi=1" +
+      "&hl=" + lang + "&cc_lang_pref=" + lang + "&cc_load_policy=" + (ccOn() ? 1 : 0) +
+      (start ? "&start=" + start : "") + "&origin=" + origin;
+  }
+  function toggleCC() {
+    store.set("yt_cc", ccOn() ? "0" : "1");
+    updateBtns();
+    var f = getIframe();
+    if (!f) { return; }
+    // El reproductor solo lee esta opción al cargarse: se recarga y sigue desde el mismo segundo.
+    var start = Math.floor(P.cur);
+    P.heard = false; P.qApplied = false; P.st = 1;
+    f.src = embedUrl(currentId, start);
+    startListening();
+  }
+
   function openPlayer(id) {
     if (currentId === id) { return; }
     currentId = id;
-    P.heard = false; P.cur = 0; P.dur = 0; P.st = 1; P.lastUser = 0;
+    P.heard = false; P.cur = 0; P.dur = 0; P.st = 1; P.lastUser = 0; P.qNow = ""; P.avail = null;
+    P.qApplied = false;
     $("player").style.display = "block";
     $("player").scrollTop = 0;
     syncOverflow();
-    var origin = encodeURIComponent(location.protocol + "//" + location.host);
-    $("frame").innerHTML =
-      '<iframe src="https://www.youtube.com/embed/' + encodeURIComponent(id) +
-      "?autoplay=1&playsinline=1&rel=0&modestbranding=1&enablejsapi=1&origin=" + origin +
+    $("frame").innerHTML = '<iframe src="' + embedUrl(id, 0) +
       '" allowfullscreen allow="autoplay; fullscreen; encrypted-media"></iframe>';
     var f = getIframe();
     if (f) { f.onload = startListening; }
     startListening();
     refreshCtl();
+    updateBtns();
     $("seek").value = 0;
     $("pfall").href = "https://www.youtube.com/watch?v=" + encodeURIComponent(id);
     $("ptitle").textContent = "";
@@ -627,10 +877,9 @@ button, input { font-family: inherit; font-size: 1em; }
     $("pchan").removeAttribute("data-ch");
     $("pstats").textContent = "";
     $("pdesc").textContent = "";
-    // comentarios: reinicio
     cm.id = id; cm.loaded = false; cm.token = ""; cm.loading = false; cm.gen++;
     $("cmlist").innerHTML = "";
-    $("ptab-comm").textContent = "Comentarios";
+    $("ptab-comm").textContent = t("comments");
     showTab("desc");
 
     call("videos", { part: "snippet,statistics", id: id }).then(function (d) {
@@ -639,18 +888,19 @@ button, input { font-family: inherit; font-size: 1em; }
       $("ptitle").textContent = decode(v.snippet.title);
       $("pchan").textContent = v.snippet.channelTitle;
       if (v.snippet.channelId) { $("pchan").setAttribute("data-ch", v.snippet.channelId); }
-      $("pstats").textContent = fmtNum(v.statistics.viewCount) + " vistas \u2022 " +
+      $("pstats").textContent = fmtNum(v.statistics.viewCount) + " " + t("views") + " \u2022 " +
         fmtAgo(v.snippet.publishedAt) +
-        (v.statistics.likeCount ? " \u2022 " + fmtNum(v.statistics.likeCount) + " me gusta" : "");
+        (v.statistics.likeCount ? " \u2022 " + fmtNum(v.statistics.likeCount) + " " + t("likes") : "");
       $("pdesc").textContent = v.snippet.description || "";
       if (v.statistics.commentCount) {
-        $("ptab-comm").textContent = "Comentarios (" + fmtNum(v.statistics.commentCount) + ")";
+        $("ptab-comm").textContent = t("comments") + " (" + fmtNum(v.statistics.commentCount) + ")";
       }
     }).catch(function () {});
   }
   function closePlayer() {
     currentId = "";
     stopListening();
+    closeQ();
     setFs(false);
     $("frame").innerHTML = "";
     $("player").style.display = "none";
@@ -681,19 +931,19 @@ button, input { font-family: inherit; font-size: 1em; }
       '<div class="ca"><span' + (ach ? ' class="chan" data-ch="' + esc(ach) + '"' : "") + ">" +
       esc(s.authorDisplayName) + '</span><span class="cd">' + esc(fmtAgo(s.publishedAt)) + "</span></div>" +
       '<div class="ct">' + esc(s.textDisplay) + "</div>" +
-      '<div class="cl">' + (s.likeCount ? esc(fmtNum(s.likeCount)) + " me gusta" : "") +
-      (replies ? '<button class="rbtn" type="button" data-reply="' + esc(id) + '">Ver ' + replies +
-        (replies === 1 ? " respuesta" : " respuestas") + "</button>" : "") + "</div>" +
+      '<div class="cl">' + (s.likeCount ? esc(fmtNum(s.likeCount) + " " + t("likes")) : "") +
+      (replies ? '<button class="rbtn" type="button" data-reply="' + esc(id) + '">' +
+        esc(t(replies === 1 ? "viewReply1" : "viewReplyN", { n: replies })) + "</button>" : "") + "</div>" +
       (replies ? '<div id="r-' + esc(id) + '" style="display:none"></div>' : "") + "</div>";
   }
   function loadComments(reset) {
     if (cm.loading || !cm.id) { return; }
     cm.loading = true;
     var gen = ++cm.gen, vid = cm.id;
-    if (reset) { cm.token = ""; $("cmlist").innerHTML = '<div class="spin">Cargando&hellip;</div>'; }
+    if (reset) { cm.token = ""; $("cmlist").innerHTML = spinHtml(); }
     else {
       removeEl("cmmore");
-      $("cmlist").insertAdjacentHTML("beforeend", '<div class="spin" id="cmspin">Cargando&hellip;</div>');
+      $("cmlist").insertAdjacentHTML("beforeend", spinHtml("cmspin"));
     }
     call("commentThreads", { part: "snippet", videoId: vid, order: cm.order, maxResults: 20,
                              textFormat: "plainText", pageToken: cm.token }).then(function (d) {
@@ -701,17 +951,20 @@ button, input { font-family: inherit; font-size: 1em; }
       cm.loading = false;
       removeEl("cmmore"); removeEl("cmspin");
       if (reset) { $("cmlist").innerHTML = ""; }
-      if (!d.items.length && reset) { $("cmlist").innerHTML = '<div class="msg">Todavía no hay comentarios.</div>'; return; }
+      if (!d.items.length && reset) {
+        $("cmlist").innerHTML = '<div class="msg">' + esc(t("noComments")) + "</div>"; return;
+      }
       var h = "";
       for (var i = 0; i < d.items.length; i++) {
-        var t = d.items[i], top = t.snippet.topLevelComment;
-        h += commentHtml(top.snippet, top.id, t.snippet.totalReplyCount || 0, false);
+        var th = d.items[i], top = th.snippet.topLevelComment;
+        h += commentHtml(top.snippet, top.id, th.snippet.totalReplyCount || 0, false);
       }
       $("cmlist").insertAdjacentHTML("beforeend", h);
       cm.token = d.nextPageToken || "";
       if (cm.token) {
         $("cmlist").insertAdjacentHTML("beforeend",
-          '<button class="more" id="cmmore" type="button" style="width:100%;margin:10px 0">Más comentarios</button>');
+          '<button class="more" id="cmmore" type="button" style="width:100%;margin:10px 0">' +
+          esc(t("moreCom")) + "</button>");
       }
     }).catch(function (e) {
       if (gen !== cm.gen) { return; }
@@ -727,21 +980,21 @@ button, input { font-family: inherit; font-size: 1em; }
     if (box.getAttribute("data-loaded") === "1") {
       var hidden = box.style.display === "none";
       box.style.display = hidden ? "block" : "none";
-      btn.textContent = hidden ? "Ocultar respuestas" : "Ver respuestas";
+      btn.textContent = hidden ? t("hideReplies") : t("showReplies");
       return;
     }
     if (box.getAttribute("data-busy") === "1") { return; }
     box.setAttribute("data-busy", "1");
     box.style.display = "block";
-    box.innerHTML = '<div class="spin" style="padding:8px">Cargando&hellip;</div>';
+    box.innerHTML = spinHtml();
     call("comments", { part: "snippet", parentId: parentId, maxResults: 50, textFormat: "plainText" })
       .then(function (d) {
         var h = "";
         for (var i = 0; i < d.items.length; i++) { h += commentHtml(d.items[i].snippet, d.items[i].id, 0, true); }
-        box.innerHTML = h || '<div class="msg">No se pudieron cargar las respuestas.</div>';
+        box.innerHTML = h || '<div class="msg">' + esc(t("replyFail")) + "</div>";
         box.setAttribute("data-loaded", "1");
         box.removeAttribute("data-busy");
-        btn.textContent = "Ocultar respuestas";
+        btn.textContent = t("hideReplies");
       }).catch(function (e) {
         box.innerHTML = '<div class="msg err">' + esc(e.message) + "</div>";
         box.removeAttribute("data-busy");
@@ -766,6 +1019,7 @@ button, input { font-family: inherit; font-size: 1em; }
   function openCfg() {
     $("key").value = getKey();
     $("reg").value = getRegion();
+    $("lang").value = lang;
     $("cfg").style.display = "block";
   }
   function closeCfg() { $("cfg").style.display = "none"; }
@@ -797,8 +1051,13 @@ button, input { font-family: inherit; font-size: 1em; }
   $("save").onclick = function () {
     var k = $("key").value.replace(/\s+/g, "");
     var r = $("reg").value.replace(/\s+/g, "").toUpperCase() || "AR";
+    var l = $("lang").value;
     store.set("yt_key", k);
     store.set("yt_region", r);
+    if (LANGS[l]) { lang = l; store.set("yt_lang", l); }
+    applyLang();
+    updateBtns();
+    refreshCtl();
     closeCfg();
     if (k) { load(true); }
   };
@@ -810,6 +1069,8 @@ button, input { font-family: inherit; font-size: 1em; }
     refreshCtl();
   };
   $("fsbtn").onclick = toggleFs;
+  $("ccbtn").onclick = toggleCC;
+  $("qbtn").onclick = openQ;
   $("ptab-desc").onclick = function () { showTab("desc"); };
   $("ptab-comm").onclick = function () { showTab("comm"); };
   $("seek").oninput = function () {
@@ -820,11 +1081,13 @@ button, input { font-family: inherit; font-size: 1em; }
 
   document.addEventListener("click", function (e) {
     var el = e.target, a;
+    if (el && el.id === "qmenu") { closeQ(); return; }
     while (el && el !== document) {
       if (el.id === "morebtn") { load(false); return; }
       if (el.id === "cmorebtn") { loadChan(false); return; }
       if (el.id === "cmmore") { loadComments(false); return; }
       if (el.getAttribute) {
+        if ((a = el.getAttribute("data-q"))) { setQuality(a); return; }
         if ((a = el.getAttribute("data-seek")) !== null) { seekBy(+a); return; }
         if ((a = el.getAttribute("data-reply"))) { toggleReplies(a, el); return; }
         if ((a = el.getAttribute("data-order"))) { setOrder(a); return; }
@@ -837,8 +1100,11 @@ button, input { font-family: inherit; font-size: 1em; }
   window.addEventListener("hashchange", route, false);
 
   /* ---------- inicio ---------- */
+  applyLang();
+  updateBtns();
+  refreshCtl();
   if (!getKey()) {
-    showMsg("Para empezar, abrí <b>Ajustes</b> (&#9881;) y pegá tu clave de API de YouTube.");
+    showMsg(t("start"));
     openCfg();
   } else {
     load(true);
