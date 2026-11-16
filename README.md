@@ -66,6 +66,12 @@ The web code is written in **ES5** (no async/await, no CSS grid, no CSS variable
 - No sign-in, commenting, liking or subscribing (this would require OAuth).
 - Subtitles only appear if the video has them, either uploaded or auto-generated.
 
+## Credits & Contributors
+
+- **[bautiepro8](https://github.com):** Project creator, concept, testing on Windows 10 Mobile hardware, and repository maintenance.
+- **Claude (Anthropic):** Core ES5 web client architecture (`index.html`), UI/UX design, multi-language support, customizable themes/AMOLED dark mode, UWP wrapper logic (`MainPage.xaml` / `MainPage.xaml.cs`), and project packaging.
+- **Gemini (Google):** Lightweight build environment setup (VS Build Tools & Windows 10 SDK), `.csproj` configuration for ARM32 compilation, certificate signing, and `.appx` sideload troubleshooting.
+
 ## Disclaimer
 
 Personal, unofficial project. Not affiliated with YouTube or Google. Use of the API is subject to the [YouTube API Services Terms of Service](https://developers.google.com/youtube/terms/api-services-terms-of-service).
