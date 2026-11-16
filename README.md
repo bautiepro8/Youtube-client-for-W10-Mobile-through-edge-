@@ -9,6 +9,9 @@ It uses the **YouTube Data API v3** and the official embedded player.
 
 **Live site:** https://bautiepro8.github.io/Youtube-client-for-W10-Mobile-through-edge-/
 
+<img width="720" height="1280" alt="wp_ss_20261116_0001" src="https://github.com/user-attachments/assets/76115b4c-c21d-41d5-8ce5-3de4b68c1726" />
+
+
 ## Features
 
 - **Trending** videos by region and **search**, with thumbnail, duration, views and upload date.
