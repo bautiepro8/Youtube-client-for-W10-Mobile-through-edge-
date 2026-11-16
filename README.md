@@ -53,14 +53,6 @@ What the app adds on top of the website:
 
 The free quota is 10,000 units per day. A search costs 100 units; the other requests (trending, channels, comments) cost 1.
 
-## Publishing the website (GitHub Pages)
-
-1. Upload `index.html` to the root of the repository.
-2. Go to **Settings → Pages**, choose *Deploy from a branch*, branch `main` and folder `/ (root)`.
-3. Wait a couple of minutes and open the address GitHub shows.
-
-It must be served over **https**. Opening the file directly (`file://`) breaks the YouTube player. This is also why the app loads the live site instead of bundling the page: the embedded player needs a real https origin.
-
 ## Compatibility
 
 The web code is written in **ES5** (no async/await, no CSS grid, no CSS variables) so it runs on EdgeHTML 15, the engine of Edge and of the app's `WebView` on Windows 10 Mobile 1703. To update the web app in Edge, reload the page, or close and reopen the tab if it still shows the old version.
@@ -73,22 +65,6 @@ The web code is written in **ES5** (no async/await, no CSS grid, no CSS variable
 - The app needs an internet connection; it does not work offline.
 - No sign-in, commenting, liking or subscribing (this would require OAuth).
 - Subtitles only appear if the video has them, either uploaded or auto-generated.
-
-## Repository structure
-
-```
-index.html                    # the whole web app: HTML, CSS and JavaScript
-README.md                     # this file
-Tubo.sln                      # Visual Studio solution
-Tubo/
-  Tubo.csproj                 # UWP project
-  Package.appxmanifest        # app identity, icons and capabilities
-  App.xaml / App.xaml.cs      # app entry point
-  MainPage.xaml / .xaml.cs    # WebView shell (back button, full screen, offline screen)
-  Properties/Default.rd.xml   # .NET Native directives
-  Assets/                     # tile, store and splash icons
-  preparar_y_compilar.ps1     # script: icons, test certificate, ARM build
-```
 
 ## Disclaimer
 
