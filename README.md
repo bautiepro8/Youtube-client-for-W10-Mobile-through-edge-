@@ -7,7 +7,7 @@ A lightweight YouTube client built to run on **Windows 10 Mobile 1703**. It come
 
 It uses the **YouTube Data API v3** and the official embedded player.
 
-**Live site:** https://julioxhernanz99-debug.github.io/Youtube-client-for-W10-Mobile-through-edge-/
+**Live site:** https://bautiepro8.github.io/Youtube-client-for-W10-Mobile-through-edge-/
 
 ## Features
 
