@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#12161c">
 <title>Tubo</title>
-<style>
+<style id="basecss">
 html, body { margin: 0; padding: 0; background: #12161c; color: #e8edf2;
   font-family: "Segoe UI", Arial, sans-serif; font-size: 15px; }
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -139,6 +139,12 @@ button, input, select { font-family: inherit; font-size: 1em; }
 .btn { height: 44px; padding: 0 20px; margin: 18px 8px 0 0; border: 0; border-radius: 4px;
   background: #f2b134; color: #12161c; font-weight: 700; }
 .btn.alt { background: transparent; color: #e8edf2; border: 1px solid #3a4452; }
+.sw { display: -ms-flexbox; display: flex; -ms-flex-wrap: wrap; flex-wrap: wrap; margin: 2px -4px 0 -4px; }
+.swb { width: 44px; height: 44px; margin: 4px; padding: 0; border-radius: 50%; border: 3px solid transparent;
+  color: #12161c; font-weight: 700; font-size: 18px; }
+.swb.on { border-color: #e8edf2; }
+.swb.bg { width: 78px; border-radius: 6px; border: 2px solid #3a4452; color: #e8edf2; font-size: 13px; }
+.swb.bg.on { border: 3px solid #f2b134; }
 </style>
 </head>
 <body>
@@ -233,6 +239,10 @@ button, input, select { font-family: inherit; font-size: 1em; }
     <option value="pt">Portugu&ecirc;s</option>
     <option value="fr">Fran&ccedil;ais</option>
   </select>
+  <label id="lbl-accent"></label>
+  <div id="accents" class="sw"></div>
+  <label id="lbl-bg"></label>
+  <div id="bgs" class="sw"></div>
   <button class="btn" id="save" type="button" data-i18n="save"></button>
   <button class="btn alt" id="close" type="button" data-i18n="close"></button>
 </div>
@@ -272,6 +282,10 @@ button, input, select { font-family: inherit; font-size: 1em; }
       eKey: "La clave de API no es válida. Revisala en Ajustes.",
       eNotEnabled: "La API de datos de YouTube v3 no está activada para esta clave.",
       eOffline: "Sin conexión con YouTube. Revisá tu internet.", eGeneric: "Error",
+      accent: "Color de acento", background: "Fondo",
+      c_amber: "Ámbar", c_orange: "Naranja", c_red: "Rojo", c_pink: "Rosa", c_purple: "Violeta",
+      c_blue: "Azul", c_cyan: "Cian", c_green: "Verde",
+      b_slate: "Oscuro", b_black: "Negro", b_navy: "Azul noche", b_plum: "Ciruela",
       numK: "{n} mil", numM: "{n} M", dec: ",",
       agoNow: "recién", agoFmt: "hace {n} {u}",
       units: [["año", "años"], ["mes", "meses"], ["semana", "semanas"], ["día", "días"],
@@ -299,6 +313,10 @@ button, input, select { font-family: inherit; font-size: 1em; }
       eKey: "The API key is not valid. Check it in Settings.",
       eNotEnabled: "The YouTube Data API v3 is not enabled for this key.",
       eOffline: "Cannot reach YouTube. Check your connection.", eGeneric: "Error",
+      accent: "Accent color", background: "Background",
+      c_amber: "Amber", c_orange: "Orange", c_red: "Red", c_pink: "Pink", c_purple: "Purple",
+      c_blue: "Blue", c_cyan: "Cyan", c_green: "Green",
+      b_slate: "Dark", b_black: "Black", b_navy: "Navy", b_plum: "Plum",
       numK: "{n}K", numM: "{n}M", dec: ".",
       agoNow: "just now", agoFmt: "{n} {u} ago",
       units: [["year", "years"], ["month", "months"], ["week", "weeks"], ["day", "days"],
@@ -326,6 +344,10 @@ button, input, select { font-family: inherit; font-size: 1em; }
       eKey: "A chave de API não é válida. Verifique em Configurações.",
       eNotEnabled: "A API de dados do YouTube v3 não está ativada para esta chave.",
       eOffline: "Sem conexão com o YouTube. Verifique a internet.", eGeneric: "Erro",
+      accent: "Cor de destaque", background: "Fundo",
+      c_amber: "Âmbar", c_orange: "Laranja", c_red: "Vermelho", c_pink: "Rosa", c_purple: "Roxo",
+      c_blue: "Azul", c_cyan: "Ciano", c_green: "Verde",
+      b_slate: "Escuro", b_black: "Preto", b_navy: "Azul-noite", b_plum: "Ameixa",
       numK: "{n} mil", numM: "{n} mi", dec: ",",
       agoNow: "agora mesmo", agoFmt: "há {n} {u}",
       units: [["ano", "anos"], ["mês", "meses"], ["semana", "semanas"], ["dia", "dias"],
@@ -353,6 +375,10 @@ button, input, select { font-family: inherit; font-size: 1em; }
       eKey: "La clé d’API n’est pas valide. Vérifiez-la dans les réglages.",
       eNotEnabled: "L’API YouTube Data v3 n’est pas activée pour cette clé.",
       eOffline: "Impossible de joindre YouTube. Vérifiez votre connexion.", eGeneric: "Erreur",
+      accent: "Couleur d’accentuation", background: "Arrière-plan",
+      c_amber: "Ambre", c_orange: "Orange", c_red: "Rouge", c_pink: "Rose", c_purple: "Violet",
+      c_blue: "Bleu", c_cyan: "Cyan", c_green: "Vert",
+      b_slate: "Sombre", b_black: "Noir", b_navy: "Bleu nuit", b_plum: "Prune",
       numK: "{n} k", numM: "{n} M", dec: ",",
       agoNow: "à l’instant", agoFmt: "il y a {n} {u}",
       units: [["an", "ans"], ["mois", "mois"], ["semaine", "semaines"], ["jour", "jours"],
@@ -383,11 +409,54 @@ button, input, select { font-family: inherit; font-size: 1em; }
     for (i = 0; i < els.length; i++) { els[i].setAttribute("title", t(els[i].getAttribute("data-i18n-title"))); }
   }
 
+  /* ---------- colores ---------- */
+  var baseEl = $("basecss"), BASE_CSS = baseEl.textContent;
+  var ACCENTS = [["amber", "#f2b134"], ["orange", "#ff8a3d"], ["red", "#ff5a5f"], ["pink", "#ff6fae"],
+                 ["purple", "#a98bff"], ["blue", "#5aa2ff"], ["cyan", "#2ec4d6"], ["green", "#4cc38a"]];
+  // [id, fondo, superficie, línea suave, línea marcada]
+  var BGS = [["slate", "#12161c", "#1c222b", "#2a323d", "#3a4452"],
+             ["black", "#000000", "#0d0f12", "#1d2127", "#2d333b"],
+             ["navy", "#0d1524", "#16233a", "#233450", "#33496b"],
+             ["plum", "#16111e", "#221a2f", "#322845", "#473a63"]];
+  function pick(list, id) {
+    for (var i = 0; i < list.length; i++) { if (list[i][0] === id) { return list[i]; } }
+    return list[0];
+  }
+  function buildThemeUI() {
+    var a = pick(ACCENTS, store.get("yt_accent")), b = pick(BGS, store.get("yt_bg")), i, h = "";
+    $("lbl-accent").textContent = t("accent") + ": " + t("c_" + a[0]);
+    $("lbl-bg").textContent = t("background") + ": " + t("b_" + b[0]);
+    for (i = 0; i < ACCENTS.length; i++) {
+      h += '<button type="button" class="swb' + (ACCENTS[i][0] === a[0] ? " on" : "") + '" data-accent="' +
+           ACCENTS[i][0] + '" title="' + esc(t("c_" + ACCENTS[i][0])) + '" style="background:' + ACCENTS[i][1] +
+           '">' + (ACCENTS[i][0] === a[0] ? "&#10003;" : "") + "</button>";
+    }
+    $("accents").innerHTML = h;
+    h = "";
+    for (i = 0; i < BGS.length; i++) {
+      h += '<button type="button" class="swb bg' + (BGS[i][0] === b[0] ? " on" : "") + '" data-bg="' +
+           BGS[i][0] + '" style="background:' + BGS[i][1] + '">' + esc(t("b_" + BGS[i][0])) + "</button>";
+    }
+    $("bgs").innerHTML = h;
+  }
+  function applyTheme() {
+    var a = pick(ACCENTS, store.get("yt_accent")), b = pick(BGS, store.get("yt_bg"));
+    baseEl.textContent = BASE_CSS
+      .replace(/#f2b134/gi, a[1])
+      .replace(/#12161c/gi, b[1])
+      .replace(/#1c222b/gi, b[2])
+      .replace(/#2a323d/gi, b[3]).replace(/#222a35/gi, b[3])
+      .replace(/#3a4452/gi, b[4]).replace(/#4a5566/gi, b[4]);
+    var m = document.querySelector('meta[name="theme-color"]');
+    if (m) { m.setAttribute("content", b[1]); }
+    buildThemeUI();
+  }
+
   var state = { mode: "trend", query: "", token: "", loading: false, gen: 0 };
   var cs = { id: "", uploads: "", token: "", loading: false, gen: 0 };
   var cm = { id: "", loaded: false, token: "", order: "relevance", loading: false, gen: 0 };
   var P = { heard: false, cur: 0, dur: 0, st: 1, lastUser: 0, timer: null, tries: 0,
-            qNow: "", avail: null, qApplied: false };
+            qNow: "", avail: null, qApplied: false, ccApplied: false, ccGen: 0 };
   var currentId = "";
 
   function getKey() { return store.get("yt_key") || ""; }
@@ -809,6 +878,10 @@ button, input, select { font-family: inherit; font-size: 1em; }
         applyQuality();
         setTimeout(applyQuality, 1500);
       }
+      if (P.st === 1 && !P.ccApplied) {
+        P.ccApplied = true;
+        enforceCC();
+      }
     } else if (d.event === "onStateChange" && typeof d.info === "number") {
       P.st = d.info;
       refreshCtl();
@@ -863,26 +936,54 @@ button, input, select { font-family: inherit; font-size: 1em; }
     var origin = encodeURIComponent(location.protocol + "//" + location.host);
     return "https://www.youtube.com/embed/" + encodeURIComponent(id) +
       "?autoplay=1&playsinline=1&rel=0&modestbranding=1&enablejsapi=1" +
-      "&hl=" + lang + "&cc_lang_pref=" + lang + "&cc_load_policy=" + (ccOn() ? 1 : 0) +
+      "&hl=" + lang + (ccOn() ? "&cc_load_policy=1&cc_lang_pref=" + lang : "&cc_load_policy=0") +
       (start ? "&start=" + start : "") + "&origin=" + origin;
   }
+  // El reproductor recuerda por su cuenta si el usuario activó subtítulos y esa preferencia pisa
+  // al parámetro de la URL. Por eso, además de la URL, se le ordena el estado por mensajes.
+  function applyCC() {
+    if (ccOn()) {
+      cmd("loadModule", ["captions"]);
+      cmd("setOption", ["captions", "track", { languageCode: lang }]);
+    } else {
+      cmd("setOption", ["captions", "track", {}]);
+      cmd("unloadModule", ["captions"]);
+      cmd("unloadModule", ["cc"]);
+    }
+  }
+  // Se repite unos segundos porque el módulo de subtítulos puede cargarse un poco después de que arranque el video.
+  function enforceCC() {
+    var gen = ++P.ccGen, id = currentId, want = ccOn();
+    applyCC();
+    [700, 1800, 3500].forEach(function (ms) {
+      setTimeout(function () {
+        if (gen === P.ccGen && id === currentId && want === ccOn()) { applyCC(); }
+      }, ms);
+    });
+  }
   function toggleCC() {
-    store.set("yt_cc", ccOn() ? "0" : "1");
+    var turningOn = !ccOn();
+    store.set("yt_cc", turningOn ? "1" : "0");
     updateBtns();
     var f = getIframe();
     if (!f) { return; }
-    // El reproductor solo lee esta opción al cargarse: se recarga y sigue desde el mismo segundo.
-    var start = Math.floor(P.cur);
-    P.heard = false; P.qApplied = false; P.st = 1;
-    f.src = embedUrl(currentId, start);
-    startListening();
+    if (turningOn) {
+      // Al activarlos se recarga con cc_load_policy=1 y sigue desde el mismo segundo.
+      var start = Math.floor(P.cur);
+      P.heard = false; P.qApplied = false; P.ccApplied = false; P.st = 1;
+      f.src = embedUrl(currentId, start);
+      startListening();
+    } else {
+      // Al desactivarlos no hace falta recargar: se descarga el módulo de subtítulos.
+      enforceCC();
+    }
   }
 
   function openPlayer(id) {
     if (currentId === id) { return; }
     currentId = id;
     P.heard = false; P.cur = 0; P.dur = 0; P.st = 1; P.lastUser = 0; P.qNow = ""; P.avail = null;
-    P.qApplied = false;
+    P.qApplied = false; P.ccApplied = false; P.ccGen++;
     $("player").style.display = "block";
     $("player").scrollTop = 0;
     syncOverflow();
@@ -923,6 +1024,7 @@ button, input, select { font-family: inherit; font-size: 1em; }
   }
   function closePlayer() {
     currentId = "";
+    P.ccGen++;
     stopListening();
     closeQ();
     setFs(false);
@@ -1080,6 +1182,7 @@ button, input, select { font-family: inherit; font-size: 1em; }
     store.set("yt_region", r);
     if (LANGS[l]) { lang = l; store.set("yt_lang", l); }
     applyLang();
+    applyTheme();
     updateBtns();
     refreshCtl();
     closeCfg();
@@ -1111,6 +1214,8 @@ button, input, select { font-family: inherit; font-size: 1em; }
       if (el.id === "cmorebtn") { loadChan(false); return; }
       if (el.id === "cmmore") { loadComments(false); return; }
       if (el.getAttribute) {
+        if ((a = el.getAttribute("data-accent"))) { store.set("yt_accent", a); applyTheme(); return; }
+        if ((a = el.getAttribute("data-bg"))) { store.set("yt_bg", a); applyTheme(); return; }
         if ((a = el.getAttribute("data-q"))) { setQuality(a); return; }
         if ((a = el.getAttribute("data-seek")) !== null) { seekBy(+a); return; }
         if ((a = el.getAttribute("data-reply"))) { toggleReplies(a, el); return; }
@@ -1127,6 +1232,7 @@ button, input, select { font-family: inherit; font-size: 1em; }
 
   /* ---------- inicio ---------- */
   applyLang();
+  applyTheme();
   updateBtns();
   refreshCtl();
   if (!getKey()) {

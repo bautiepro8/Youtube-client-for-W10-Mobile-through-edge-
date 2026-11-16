@@ -20,13 +20,14 @@ It uses the **YouTube Data API v3** and the official embedded player.
 - **Comments** sorted by top or newest, with expandable replies.
 - **Channel pages** with avatar, subscriber count and all of the channel's videos.
 - **Interface languages:** Spanish, English, Portuguese and French.
+- **Customizable colors:** 8 accent colors and 4 backgrounds (including pure black for AMOLED screens), applied instantly from Settings.
 - The phone's hardware back button returns to the previous screen.
 
 ## Using the web app
 
 1. Open the live site in Edge.
 2. Tap the gear icon (⚙) and paste your YouTube **API key**. It is stored only on the device.
-3. Pick a region and a language, then tap **Save**.
+3. Pick a region, a language and your colors, then tap **Save**.
 4. Optional: in the Edge menu, choose **Pin to Start** to keep it like any other app.
 
 ## Using the Windows app
