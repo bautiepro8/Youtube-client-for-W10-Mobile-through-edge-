@@ -83,7 +83,7 @@ If you host the site somewhere else, change `SiteHost` and `SiteUrl` at the top 
 1. Go to [Google Cloud Console](https://console.cloud.google.com/) and create a project.
 2. Enable **YouTube Data API v3** under *APIs & Services → Library*.
 3. Under *Credentials*, create an **API key**.
-4. Recommended: restrict it to **Websites (HTTP referrers)** with `https://julioxhernanz99-debug.github.io/*` and limit the API to *YouTube Data API v3*. The key is visible in the browser, so the restriction stops others from using it.
+4. Recommended: restrict it to **Websites (HTTP referrers)** with `https://bautiepro8.github.io/*` and limit the API to *YouTube Data API v3*. The key is visible in the browser, so the restriction stops others from using it.
 
 The free quota is 10,000 units per day. A search costs 100 units; the other requests (trending, channels, comments) cost 1.
 
