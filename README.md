@@ -44,40 +44,6 @@ What the app adds on top of the website:
 - Shows a "Retry" screen when there is no connection.
 - The API key you enter in Settings stays inside the app.
 
-### Requirements to build it
-
-- Windows 10 or 11 PC with **Visual Studio** (2019 or 2022) and the **Universal Windows Platform development** workload. Build Tools work too.
-- A Windows 10 SDK, version **14393 or newer**. The app targets the newest one installed and supports phones from build 14393 up, which includes 1703 (build 15063).
-- Internet access on the first build, to restore NuGet packages.
-
-### Option A: install straight from Visual Studio (easiest)
-
-1. On the phone, enable **Settings → Update & security → For developers → Developer mode**.
-2. Connect the phone by USB.
-3. Open `Tubo.sln`. If Visual Studio offers to retarget the project, accept.
-4. In the toolbar choose **Release**, **ARM** and **Device**, then press **Ctrl+F5**.
-
-### Option B: build an `.appx` with the script
-
-1. Open PowerShell inside the `Tubo` folder.
-2. If scripts are blocked, run `Set-ExecutionPolicy -Scope Process Bypass`.
-3. Run `.\preparar_y_compilar.ps1`.
-
-The script creates any missing icons, makes a self-signed test certificate (`TuboKey.pfx`, password `1234`), finds MSBuild and the newest SDK, then builds an ARM package. The result is in `Tubo\AppPackages\`: the `.appx`, a `Dependencies` folder and the certificate (`.cer`).
-
-To install the `.appx` on the phone with the Windows SDK deployment tool:
-
-```
-WinAppDeployCmd devices
-WinAppDeployCmd install -file Tubo_1.0.0.0_ARM.appx -guid <device-guid>
-```
-
-Install the packages in `Dependencies\ARM\` first if the tool asks for them. Depending on the phone, you may also need to trust the `.cer` certificate; if you run into certificate errors, use Option A instead.
-
-### Using your own fork
-
-If you host the site somewhere else, change `SiteHost` and `SiteUrl` at the top of `Tubo/MainPage.xaml.cs`, and update the `Publisher` and `PublisherDisplayName` in `Tubo/Package.appxmanifest` together with the certificate subject in the script (`CN=...`). Do not commit `*.pfx` files, `bin/`, `obj/` or `AppPackages/`.
-
 ## Getting an API key
 
 1. Go to [Google Cloud Console](https://console.cloud.google.com/) and create a project.
